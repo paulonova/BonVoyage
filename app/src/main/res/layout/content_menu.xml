@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="se.paulo.nackademin.examen.bonvoyage.MenuActivity"
+        tools:showIn="@layout/app_bar_menu">
+
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tableNewTrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1,2">
+
+
+
+            <ImageView
+                android:layout_width="157dp"
+                android:layout_height="61dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/logo_text" />
+
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/text_destination"
+                android:textColor="#fe000000"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/destination"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="@string/text_destination"
+                android:inputType="text" />
+
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/type_trip"
+                android:textColor="#fe000000"
+                android:textSize="15sp" />
+
+
+            <TableRow
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="5dp">
+
+                <RadioGroup
+                    android:id="@+id/typeTrip"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/vacationBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/vacation"
+                        android:textColor="#fe000000" />
+
+                    <RadioButton
+                        android:id="@+id/businessBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="70dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/business"
+                        android:textColor="#fe000000" />
+                </RadioGroup>
+
+            </TableRow>
+
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tableNewTrip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="0,1,2">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:text="@string/arrival_date"
+                        android:textColor="#fe000000" />
+
+                    <TextView
+                        android:layout_gravity="center"
+                        android:text="@string/exit_date"
+                        android:textColor="#fe000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                    <Button
+                        android:id="@+id/arrivalBtn"
+                        android:drawableLeft="@drawable/ic_calendar_24dp"
+                        android:onClick="showDatePickerDialog"
+                        android:text="@string/select" />
+
+                    <Button
+                        android:id="@+id/exitBtn"
+                        android:drawableLeft="@drawable/ic_calendar_24dp"
+                        android:onClick="showDatePickerDialog"
+                        android:text="@string/select" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@drawable/cash_multiple"
+                android:text="@string/text_budget"
+                android:textColor="#fe000000"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/budget"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="@string/text_budget"
+                android:inputType="numberDecimal" />
+
+            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tableNewTrip3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1">
+
+                <TableRow
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp">
+
+                    <TextView
+                        android:layout_marginRight="70dp"
+                        android:text="@string/number_of_people"
+                        android:textColor="#fe000000" />
+
+                    <EditText
+                        android:id="@+id/number_people"
+                        android:layout_marginRight="10dp"
+                        android:inputType="numberDecimal" />
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/save_trip"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:drawableLeft="@drawable/ic_save_24dp"
+                android:onClick="saveTrip"
+                android:text="@string/save_voyage" />
+
+
+        </TableLayout>
+
+    </ScrollView>
