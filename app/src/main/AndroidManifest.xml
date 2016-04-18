@@ -30,7 +30,12 @@
         <activity
             android:name=".BonVoyageInfoActivity"
             android:label="@string/title_activity_meny2"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.paulo.nackademin.examen.bonvoyage.MenuActivity"/>
+
+        </activity>
         <activity android:name=".LoginPage" />
         <activity android:name=".RegisterActivity"
             android:label="@string/register"/>

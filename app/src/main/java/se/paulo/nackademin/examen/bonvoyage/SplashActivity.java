@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 }catch (Exception e){
                     Log.e("ERROR SPLASH", "" + e.getMessage());
                 }finally {
-                    Intent intent = new Intent(getApplicationContext(), BonVoyageInfoActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginPage.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     finish();
                     startActivity(intent);

@@ -122,7 +122,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="user">Username</string>
     <string name="password">Password</string>
-    <string name="keep_logged">Keep Logad in</string>
+    <string name="keep_logged">Keep logged</string>
     <string name="loginConfirm">Confirm Login</string>
     <string name="register">Register</string>
     <string name="login_page">Login Page</string>
@@ -139,7 +139,12 @@
     <string name="arrival_date">Arrival date</string>
     <string name="exit_date">Departure date</string>
     <string name="select">Select</string>
-    <string name="text_budget">Budget</string>
+    <string name="text_budget"> Budget</string>
     <string name="number_of_people">Number of Persons:</string>
     <string name="save_voyage">Save Voyage</string>
+    <string name="action_info">App Info</string>
+    <string name="comunicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="info">Info</string>
+    <string name="logout">Logout</string>
 </resources>

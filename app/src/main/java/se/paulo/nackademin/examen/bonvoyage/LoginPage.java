@@ -22,8 +22,8 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
 
             }
         });
@@ -33,7 +33,6 @@ public class LoginPage extends AppCompatActivity {
 
     public void sendToRegister(View v){
         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }
