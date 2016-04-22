@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -33,12 +34,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="se.paulo.nackademin.examen.bonvoyage.MenuActivity"/>
-
+                android:value="se.paulo.nackademin.examen.bonvoyage.MenuActivity" />
         </activity>
         <activity android:name=".LoginPage" />
-        <activity android:name=".RegisterActivity"
-            android:label="@string/register"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/register" />
+        <activity
+            android:name=".SpendingActivity"
+            android:label="@string/title_activity_spending"
+            android:parentActivityName=".MenuActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.paulo.nackademin.examen.bonvoyage.MenuActivity" />
+        </activity>
     </application>
 
 </manifest>

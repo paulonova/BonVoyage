@@ -1,5 +1,6 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity
@@ -24,6 +27,9 @@ public class MenuActivity extends AppCompatActivity
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //hiding the soft-keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
 
@@ -88,7 +94,9 @@ public class MenuActivity extends AppCompatActivity
                 break;
 
             case R.id.new_spending:
-
+                Intent intentSpending = new Intent(this, SpendingActivity.class);
+                intentSpending.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentSpending);
                 break;
 
             case R.id.show_voyages:
@@ -104,15 +112,19 @@ public class MenuActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_info:
-                Intent intent = new Intent(this, BonVoyageInfoActivity.class);
-                startActivity(intent);
+                Intent intentInfo = new Intent(this, BonVoyageInfoActivity.class);
+                intentInfo.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentInfo);
                 break;
 
             case R.id.logout:
                 Intent logout = new Intent(this, LoginPage.class);
                 logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout);
+                finish();
         }
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

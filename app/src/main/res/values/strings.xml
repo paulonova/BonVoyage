@@ -147,4 +147,13 @@
     <string name="share">Share</string>
     <string name="info">Info</string>
     <string name="logout">Logout</string>
+    <string name="title_activity_spending">Spending</string>
+    <string name="value">Value</string>
+    <string name="select_date">Select date</string>
+    <string name="description">Description</string>
+    <string name="place">Place</string>
+    <string name="spending">Spending</string>
+    <string name="select_spinner">Select a category</string>
+
+
 </resources>
