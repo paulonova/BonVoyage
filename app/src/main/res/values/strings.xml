@@ -126,7 +126,7 @@
     <string name="loginConfirm">Confirm Login</string>
     <string name="register">Register</string>
     <string name="login_page">Login Page</string>
-    <string name="first_name">First name</string>
+    <string name="username">Username</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
     <string name="savePrefer">Save</string>
