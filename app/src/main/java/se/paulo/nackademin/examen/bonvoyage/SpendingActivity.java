@@ -28,7 +28,7 @@ public class SpendingActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(toolbar);
 
         categories = (Spinner)findViewById(R.id.spinner_category);
-        categories.setPrompt("Select a category");
+        //categories.setPrompt("Select a category");
         categories.setOnItemSelectedListener(this);
 
 
@@ -39,7 +39,7 @@ public class SpendingActivity extends AppCompatActivity implements AdapterView.O
         categorieList.add("Accommodation");
         categorieList.add("Others");
 
-        ArrayAdapter<String> spinnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categorieList);
+        ArrayAdapter<String> spinnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorieList);
         spinnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categories.setAdapter(spinnAdapter);
 

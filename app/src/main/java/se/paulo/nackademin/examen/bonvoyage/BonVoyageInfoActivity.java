@@ -14,7 +14,7 @@ public class BonVoyageInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        //Connecting to MenuActivity!
+        //Connecting to MenuVoyageActivity!
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
