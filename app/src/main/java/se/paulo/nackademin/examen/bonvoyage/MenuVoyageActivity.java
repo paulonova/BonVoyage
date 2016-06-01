@@ -25,10 +25,10 @@ public class MenuVoyageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        //Set Fragment initially
-        NewVoyageFragment voyageFragment = new NewVoyageFragment();
+        //This is the first view in DrawerLayout..
+        FirstAppInfoFragment firstAppInfoFragment = new FirstAppInfoFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_menu_container, voyageFragment);
+        fragmentTransaction.replace(R.id.fragment_menu_container, firstAppInfoFragment);
         fragmentTransaction.commit();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +86,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
