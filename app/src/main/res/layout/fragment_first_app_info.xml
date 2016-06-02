@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".FirstAppInfoFragment">
 
     <ImageView
@@ -15,7 +15,6 @@
         android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
         android:layout_margin="@dimen/text_margin">
 
         <ImageView
@@ -23,42 +22,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/how_it_works"/>
+            android:layout_marginTop="50dp"
+            android:src="@drawable/how_it_works" />
 
-        <Button
-            android:id="@+id/btnHowToRegisterTrip"
-            android:layout_below="@id/how_it_works"
-            android:layout_width="131dp"
-            android:layout_height="119dp"
-            android:layout_gravity="start" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@id/how_it_works">
 
-        <Button
-            android:id="@+id/btnHowToRegisterSpend"
-            android:layout_toRightOf="@id/btnHowToRegisterTrip"
-            android:layout_below="@id/how_it_works"
-            android:layout_width="131dp"
-            android:layout_height="119dp"
-            android:gravity="end" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold|italic"
+                android:textColor="#00796b"
+                android:textAlignment="center"
+                android:text="@string/info_howitworks"/>
 
-        <Button
-            android:id="@+id/btnHowToViewTripInfo"
-            android:layout_below="@id/btnHowToRegisterTrip"
-            android:layout_width="131dp"
-            android:layout_height="119dp"
-            android:layout_gravity="left|bottom" />
 
-        <Button
-            android:id="@+id/btnHowToChangeThings"
-            android:layout_below="@id/btnHowToRegisterSpend"
-            android:layout_toRightOf="@id/btnHowToViewTripInfo"
-            android:layout_width="131dp"
-            android:layout_height="119dp"
-            android:layout_gravity="end|bottom" />
+        </ScrollView>
+
+
+
+
+
 
 
     </RelativeLayout>
-
-
 
 
 </FrameLayout>
