@@ -157,6 +157,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hiw_1">First of all, you need to register your trip by adding of your destination, what kind of trip will you have, \"Vacations\" or \"Business\", arrival date, departure date, how much money will you have to spend in your trip and finally how many people will be in this trip.</string>
 
 
 </resources>
