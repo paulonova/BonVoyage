@@ -4,22 +4,37 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
+
+import bonvoyage.objects.Voyage;
 
 public class MenuVoyageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
+    Voyage voyage;
+
+    NewVoyageFragment voyageFragment = null;
+    ShowVoyagesFragment showVoyagesFragment = null;
+
+    //EditText destination, budget, numberPerson;
+    Button saveTrip;
+    String destiny;
 
 
     @Override
@@ -51,6 +66,12 @@ public class MenuVoyageActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //From NewVoyageFragment there I will save trip register..
+        //voyageFragment.destination = (EditText)findViewById(R.id.destination);
+        saveTrip = (Button)findViewById(R.id.save_trip);
+
+
     }
 
     @Override
@@ -101,7 +122,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         switch (id){
             case R.id.new_register:
                 //Set Fragment initially
-                NewVoyageFragment voyageFragment = new NewVoyageFragment();
+                voyageFragment = new NewVoyageFragment();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_menu_container, voyageFragment);
                 fragmentTransaction.commit();
@@ -117,6 +138,10 @@ public class MenuVoyageActivity extends AppCompatActivity
 
             case R.id.show_voyages:
 
+                showVoyagesFragment = new ShowVoyagesFragment();
+                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, showVoyagesFragment);
+                fragmentVoyageTransaction.commit();
                 break;
 
             case R.id.settings:
@@ -146,5 +171,11 @@ public class MenuVoyageActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void saveTrip(View v){
+        String destiny2 = voyageFragment.destination.getText().toString();
+        Log.e("Test Text: "," " + destiny2);
+        Toast.makeText(getApplicationContext(), "TESTANDO..." + destiny2 , Toast.LENGTH_SHORT).show();
     }
 }

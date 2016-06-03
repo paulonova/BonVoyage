@@ -3,7 +3,7 @@ package bonvoyage.objects;
 
 public class Voyage {
 
-    public static final String TABLE = "trip";
+    public static final String TABLE = "voyage";
     public static final String _ID = "_id";
     public static final String USER_ID = "user_id";
     public static final String DESTINY = "destiny";

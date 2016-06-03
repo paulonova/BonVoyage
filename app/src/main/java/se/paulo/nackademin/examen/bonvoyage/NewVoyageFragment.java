@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 /**
@@ -19,24 +22,26 @@ import android.view.WindowManager;
  */
 public class NewVoyageFragment extends Fragment {
 
+    EditText destination, budget, numberPerson;
+    public static String getDestination;
+
 
     public NewVoyageFragment() {
         // Required empty public constructor
     }
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_new_voyage, container, false);
+        destination = (EditText)rootView.findViewById(R.id.destination);
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_voyage, container, false);
+        return rootView;
     }
+
 
 }
