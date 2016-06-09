@@ -174,8 +174,9 @@ public class MenuVoyageActivity extends AppCompatActivity
     }
 
     public void saveTrip(View v){
-        String destiny2 = voyageFragment.destination.getText().toString();
-        Log.e("Test Text: "," " + destiny2);
-        Toast.makeText(getApplicationContext(), "TESTANDO..." + destiny2 , Toast.LENGTH_SHORT).show();
+        voyage = new Voyage();
+        voyage.setDestiny(voyageFragment.destination.getText().toString());
+        Log.e("Test Text: "," " + voyage.getDestiny());
+        Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() , Toast.LENGTH_SHORT).show();
     }
 }

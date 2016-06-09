@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.List;
+
+import bonvoyage.objects.Voyage;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,7 +19,7 @@ import android.widget.ListView;
 public class ShowVoyagesFragment extends Fragment {
 
     VoyageViewArrayAdapter voyageViewArrayAdapter;
-    String message = "Show voyages list";
+    List<Voyage> voyageArray;
 
 
     public ShowVoyagesFragment() {
@@ -26,11 +30,12 @@ public class ShowVoyagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ListView listView = (ListView)container.findViewById(R.id.voyageListView);
-        voyageViewArrayAdapter = new VoyageViewArrayAdapter(getContext(), android.R.layout.simple_list_item_1,null );
+        View rootView = inflater.inflate(R.layout.fragment_show_voyages, container, false);
+        ListView listView = (ListView)rootView.findViewById(R.id.voyageListView);
+        voyageViewArrayAdapter = new VoyageViewArrayAdapter(getContext(), android.R.layout.simple_list_item_1, null );
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_show_voyages, container, false);
+        return rootView;
     }
 
 }

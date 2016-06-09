@@ -37,7 +37,8 @@ public class NewVoyageFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_new_voyage, container, false);
         destination = (EditText)rootView.findViewById(R.id.destination);
-
+        budget = (EditText)rootView.findViewById(R.id.budget);
+        numberPerson = (EditText)rootView.findViewById(R.id.number_people);
 
         // Inflate the layout for this fragment
         return rootView;
