@@ -1,5 +1,6 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import bonvoyage.objects.Voyage;
 
 public class MenuVoyageActivity extends AppCompatActivity
@@ -32,8 +35,6 @@ public class MenuVoyageActivity extends AppCompatActivity
     NewVoyageFragment voyageFragment = null;
     ShowVoyagesFragment showVoyagesFragment = null;
 
-    //EditText destination, budget, numberPerson;
-    Button saveTrip;
     String destiny;
 
 
@@ -66,11 +67,6 @@ public class MenuVoyageActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //From NewVoyageFragment there I will save trip register..
-        //voyageFragment.destination = (EditText)findViewById(R.id.destination);
-        saveTrip = (Button)findViewById(R.id.save_trip);
-
 
     }
 
@@ -109,9 +105,25 @@ public class MenuVoyageActivity extends AppCompatActivity
                 break;
         }
 
-
         return super.onOptionsItemSelected(item);
     }
+
+    // Method to show Calendar in display.
+    public void setArriveDate() {
+        new DatePickerDialog(MenuVoyageActivity.this, voyageFragment.dArrival,  voyageFragment.arrivalCalendar.get(Calendar.YEAR),
+                                                                                voyageFragment.arrivalCalendar.get(Calendar.MONTH),
+                                                                                voyageFragment.arrivalCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public void setExitDate() {
+        new DatePickerDialog(MenuVoyageActivity.this, voyageFragment.dExit,  voyageFragment.exitCalendar.get(Calendar.YEAR),
+                                                                                voyageFragment.exitCalendar.get(Calendar.MONTH),
+                                                                                voyageFragment.exitCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+
+
+
 
 
     @Override
@@ -165,18 +177,44 @@ public class MenuVoyageActivity extends AppCompatActivity
                 finish();
         }
 
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+
+
+    //Buttons to get the date to travel
+    public void showArrivalDatePickerDialog(View v){
+        setArriveDate();
+    }
+
+    public void showExitDatePickerDialog(View v){
+        setExitDate();
+    }
+
+
     public void saveTrip(View v){
         voyage = new Voyage();
+
+        int type = voyageFragment.radioGroup.getCheckedRadioButtonId();
+        if(type == R.id.vacationBtn){
+            voyage.setTypeTrip(getString(R.string.vacation));
+        }else{
+            voyage.setTypeTrip(getString(R.string.business));
+        }
+
         voyage.setDestiny(voyageFragment.destination.getText().toString());
-        Log.e("Test Text: "," " + voyage.getDestiny());
-        Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() , Toast.LENGTH_SHORT).show();
+        voyage.setBudget(Double.parseDouble(voyageFragment.budget.getText().toString()));
+        voyage.setNumberPeoples(Integer.parseInt(voyageFragment.numberPerson.getText().toString()));
+        voyage.setArrivalDate(voyageFragment.arrivalBtn.getText().toString());
+        voyage.setExitDate(voyageFragment.exitBtn.getText().toString());
+
+        Log.e("Test Text: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
+                                + " : " + voyage.getTypeTrip() + " : " + voyage.getArrivalDate()
+                                + " : " + voyage.getExitDate() );
+        Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples() , Toast.LENGTH_SHORT).show();
     }
+
+
 }

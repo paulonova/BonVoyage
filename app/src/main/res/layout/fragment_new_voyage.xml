@@ -53,7 +53,7 @@
             android:layout_marginLeft="5dp">
 
             <RadioGroup
-                android:id="@+id/typeTrip"
+                android:id="@+id/rg_typeTrip"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
@@ -104,13 +104,13 @@
                 <Button
                     android:id="@+id/arrivalBtn"
                     android:drawableLeft="@drawable/ic_calendar_24dp"
-                    android:onClick="showDatePickerDialog"
+                    android:onClick="showArrivalDatePickerDialog"
                     android:text="@string/select" />
 
                 <Button
                     android:id="@+id/exitBtn"
                     android:drawableLeft="@drawable/ic_calendar_24dp"
-                    android:onClick="showDatePickerDialog"
+                    android:onClick="showExitDatePickerDialog"
                     android:text="@string/select" />
             </TableRow>
         </TableLayout>
