@@ -64,7 +64,7 @@
         <TableRow>
 
             <Button
-                android:id="@+id/saveBtn"
+                android:id="@+id/saveRegisterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -73,7 +73,7 @@
                 android:text="@string/savePrefer" />
 
             <Button
-                android:id="@+id/cancelBtn"
+                android:id="@+id/cancelRegisterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

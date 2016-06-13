@@ -33,10 +33,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         email = (EditText)findViewById(R.id.email);
         password = (EditText)findViewById(R.id.password);
 
-        save = (Button)findViewById(R.id.saveBtn);
+        save = (Button)findViewById(R.id.saveRegisterBtn);
         save.setOnClickListener(this);
 
-        cancel = (Button)findViewById(R.id.cancelBtn);
+        cancel = (Button)findViewById(R.id.cancelRegisterBtn);
         cancel.setOnClickListener(this);
 
 
@@ -51,11 +51,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.saveBtn:
+            case R.id.saveRegisterBtn:
                 checkInputValues();
                 break;
 
-            case R.id.cancelBtn:
+            case R.id.cancelRegisterBtn:
                 finish();
                 Toast.makeText(getApplicationContext(), "Register canceled", Toast.LENGTH_SHORT).show();
         }

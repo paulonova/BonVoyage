@@ -61,18 +61,20 @@
             <TableRow>
 
                 <EditText
-                    android:id="@+id/value"
+                    android:id="@+id/edtValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/cash_multiple"
+                    android:drawableStart="@drawable/cash_multiple"
                     android:hint="@string/value"
-                    android:inputType="numberDecimal" />
+                    android:inputType="number" />
 
                 <Button
-                    android:id="@+id/date"
+                    android:id="@+id/spendingDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:onClick="showSpendDatePickerDialog"
                     android:drawableLeft="@drawable/ic_calendar_24dp"
                     android:text="@string/select_date" />
 
@@ -80,7 +82,7 @@
             </TableRow>
 
             <EditText
-                android:id="@+id/descriptionTxt"
+                android:id="@+id/edtDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -89,7 +91,7 @@
                 android:inputType="text" />
 
             <EditText
-                android:id="@+id/placeTxt"
+                android:id="@+id/edtPlace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

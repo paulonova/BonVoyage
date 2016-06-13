@@ -4,14 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_app"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".BonVoyageInfoActivity"
     tools:showIn="@layout/activity_info">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold|italic"
+            android:textColor="#00796b"
+            android:text="@string/large_text" />
+
+        <ImageView
+            android:id="@+id/how_it_works"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/how_it_works" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold|italic"
+            android:textColor="#00796b"
+            android:text="@string/info_howitworks"/>
+
+
+    </LinearLayout>
+
 
 </android.support.v4.widget.NestedScrollView>

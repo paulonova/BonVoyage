@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,9 @@ import java.util.List;
 public class SpendingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner categories;
-    List<String> categorieList;
+    List<String> categoryList;
+
+    SpendingFragment spendingFragment;
 
 
     @Override
@@ -31,15 +34,19 @@ public class SpendingActivity extends AppCompatActivity implements AdapterView.O
         //categories.setPrompt("Select a category");
         categories.setOnItemSelectedListener(this);
 
+        //TESTING..
+        spendingFragment = new SpendingFragment();
 
-        categorieList = new ArrayList<>();
-        categorieList.add("Food");
-        categorieList.add("Fuel");
-        categorieList.add("Transportation");
-        categorieList.add("Accommodation");
-        categorieList.add("Others");
 
-        ArrayAdapter<String> spinnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categorieList);
+
+        categoryList = new ArrayList<>();
+        categoryList.add("Food");
+        categoryList.add("Fuel");
+        categoryList.add("Transportation");
+        categoryList.add("Accommodation");
+        categoryList.add("Others");
+
+        ArrayAdapter<String> spinnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryList);
         spinnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categories.setAdapter(spinnAdapter);
 
@@ -47,6 +54,8 @@ public class SpendingActivity extends AppCompatActivity implements AdapterView.O
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

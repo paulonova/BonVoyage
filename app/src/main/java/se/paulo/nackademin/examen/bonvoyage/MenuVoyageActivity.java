@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 
 public class MenuVoyageActivity extends AppCompatActivity
@@ -32,8 +33,10 @@ public class MenuVoyageActivity extends AppCompatActivity
     Toolbar toolbar = null;
     Voyage voyage;
 
+    //All Fragments..
     NewVoyageFragment voyageFragment = null;
     ShowVoyagesFragment showVoyagesFragment = null;
+    SpendingFragment spendingFragment = null;
 
     String destiny;
 
@@ -116,13 +119,16 @@ public class MenuVoyageActivity extends AppCompatActivity
     }
 
     public void setExitDate() {
-        new DatePickerDialog(MenuVoyageActivity.this, voyageFragment.dExit,  voyageFragment.exitCalendar.get(Calendar.YEAR),
+        new DatePickerDialog(MenuVoyageActivity.this, voyageFragment.dExit,     voyageFragment.exitCalendar.get(Calendar.YEAR),
                                                                                 voyageFragment.exitCalendar.get(Calendar.MONTH),
                                                                                 voyageFragment.exitCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-
-
+    public void setSpendingDate() {
+        new DatePickerDialog(MenuVoyageActivity.this, spendingFragment.dSpend,  spendingFragment.spendCalendar.get(Calendar.YEAR),
+                                                                                spendingFragment.spendCalendar.get(Calendar.MONTH),
+                                                                                spendingFragment.spendCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
 
 
@@ -142,7 +148,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
             case R.id.new_spending:
                 //Set Fragment initially
-                SpendingFragment spendingFragment = new SpendingFragment();
+                spendingFragment = new SpendingFragment();
                 android.support.v4.app.FragmentTransaction fragmentSpendingTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentSpendingTransaction.replace(R.id.fragment_menu_container, spendingFragment);
                 fragmentSpendingTransaction.commit();
@@ -193,6 +199,10 @@ public class MenuVoyageActivity extends AppCompatActivity
         setExitDate();
     }
 
+    public void showSpendDatePickerDialog(View v){
+        setSpendingDate();
+    }
+
 
     public void saveTrip(View v){
         voyage = new Voyage();
@@ -214,6 +224,23 @@ public class MenuVoyageActivity extends AppCompatActivity
                                 + " : " + voyage.getTypeTrip() + " : " + voyage.getArrivalDate()
                                 + " : " + voyage.getExitDate() );
         Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples() , Toast.LENGTH_SHORT).show();
+    }
+
+
+
+    // ************************************************ IMPLEMENTING OF SPENDING FRAGMENT ****************************************************
+
+    public void saveSpending(View v){
+        Spending spend = new Spending();
+
+        spend.setValue(Double.parseDouble(spendingFragment.value.getText().toString()));
+        spend.setDescription(spendingFragment.description.getText().toString());
+        spend.setPlace(spendingFragment.place.getText().toString());
+        spend.setDate(spendingFragment.dateSpending.getText().toString());
+        spend.setCategory(spendingFragment.spinner.getSelectedItem().toString());
+        Toast.makeText(getApplicationContext(), "TESTANDO..." + spend.getValue() + " - " + spend.getDescription()
+                                                              + " - " + spend.getPlace() + " - " + spend.getDate()
+                + " - " + spend.getCategory(), Toast.LENGTH_SHORT).show();
     }
 
 
