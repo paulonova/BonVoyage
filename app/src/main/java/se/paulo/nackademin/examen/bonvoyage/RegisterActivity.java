@@ -43,9 +43,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void cancelActivity(View v){
-        finish();
-    }
+
 
     @Override
     public void onClick(View v) {
@@ -64,8 +62,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public void checkInputValues() {
 
+        user.setUsename(username.getText().toString());
+        user.setPassword(password.getText().toString());
+        user.setEmail(email.getText().toString());
 
-
+        String msg = user.getUsename() + " - " + user.getPassword() + " - " + user.getEmail();
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 
     }
 

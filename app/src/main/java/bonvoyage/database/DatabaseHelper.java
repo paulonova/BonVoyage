@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL( "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        db.execSQL("CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "username TEXT," +
                     "email TEXT," +
                     "password TEXT);");
@@ -37,11 +37,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(user_id) REFERENCES user(_id));");
 
         db.execSQL("CREATE TABLE spending (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "category TEXT, " +
-                    "date DATE, " +
+                    "category TEXT," +
+                    "date DATE," +
                     "value DOUBLE," +
-                    "description TEXT, " +
-                    "place TEXT, " +
+                    "description TEXT," +
+                    "place TEXT," +
                     "trip_id INTEGER," +
                     "FOREIGN KEY(voyage_id) REFERENCES voyage(_id));");
 
