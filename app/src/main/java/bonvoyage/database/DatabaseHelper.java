@@ -1,8 +1,13 @@
 package bonvoyage.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
+import bonvoyage.objects.User;
 
 /**
  * Created by Paulo Vila Nova on 2016-04-22.
@@ -42,10 +47,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "value DOUBLE," +
                     "description TEXT," +
                     "place TEXT," +
-                    "trip_id INTEGER," +
+                    "voyage_id INTEGER," +
                     "FOREIGN KEY(voyage_id) REFERENCES voyage(_id));");
 
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -55,4 +62,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+
+    //Method to get user information..
+    //CONSTRUCTOR ==> public User(String username, String email, String password, int user_id)
+    public User getUserInfo(String username){
+        User user = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {"username", "email", "password", "_id"};
+        String selection = "username=?";
+        String[]selectArgs = {username};
+
+        Cursor cursor = db.query("user",projection, selection, selectArgs, null, null, null);
+        if(cursor.moveToFirst()){
+            user = new User(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3));
+        }
+        cursor.close();
+        return user;
+
+    }
+
+
+
+
+
 }

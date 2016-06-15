@@ -1,12 +1,17 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener  {
@@ -22,12 +27,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button save;
     private Button cancel;
 
+    private DatabaseHelper helper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        user = new User();
 
         username = (EditText)findViewById(R.id.userName);
         email = (EditText)findViewById(R.id.email);
@@ -38,6 +44,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         cancel = (Button)findViewById(R.id.cancelRegisterBtn);
         cancel.setOnClickListener(this);
+
+        // Prepare access to database..
+        helper = new DatabaseHelper(this);
 
 
     }
@@ -50,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         switch (v.getId()){
             case R.id.saveRegisterBtn:
-                checkInputValues();
+                saveInputValues();
                 break;
 
             case R.id.cancelRegisterBtn:
@@ -60,14 +69,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void checkInputValues() {
+    public void saveInputValues() {
 
-        user.setUsename(username.getText().toString());
+        user = new User();
+        user.setUsername(username.getText().toString());
         user.setPassword(password.getText().toString());
         user.setEmail(email.getText().toString());
 
-        String msg = user.getUsename() + " - " + user.getPassword() + " - " + user.getEmail();
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        try {
+
+            ContentValues values = new ContentValues();
+            values.put("username", user.getUsername());
+            values.put("password", user.getPassword());
+            values.put("email", user.getEmail());
+
+            long result = db.insert("user", null, values);
+
+            if (result != -1) {
+                Toast.makeText(this, "Register saved successfully..", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        }catch (SQLiteException e){
+            Log.e("SQLiteException","" + e.getMessage());
+            Toast.makeText(this, "Register NOT saved! ", Toast.LENGTH_SHORT).show();
+        }
+
+
+        String msg = user.getUsername() + " - " + user.getPassword() + " - " + user.getEmail();
+        Log.i("USER INFO","" + msg);
 
     }
 

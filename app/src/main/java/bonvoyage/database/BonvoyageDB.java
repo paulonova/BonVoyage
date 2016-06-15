@@ -33,7 +33,7 @@ public class BonvoyageDB {
             db.execSQL("DROP TABLE IF EXISTS voyage");
             db.execSQL("DROP TABLE IF EXISTS spending");
 
-            db.execSQL( "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            db.execSQL( "CREATE TABLE user (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "username TEXT," +
                     "email TEXT," +
                     "password TEXT);");
@@ -49,12 +49,12 @@ public class BonvoyageDB {
                     "FOREIGN KEY(user_id) REFERENCES user(_id));");
 
             db.execSQL("CREATE TABLE spending (_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "category TEXT, " +
-                    "date DATE, " +
+                    "category TEXT," +
+                    "date DATE," +
                     "value DOUBLE," +
-                    "description TEXT, " +
-                    "place TEXT, " +
-                    "trip_id INTEGER," +
+                    "description TEXT," +
+                    "place TEXT," +
+                    "voyage_id INTEGER," +
                     "FOREIGN KEY(voyage_id) REFERENCES voyage(_id));");
 
             Log.d("Drop and Re-create"," Was successfully!!");
