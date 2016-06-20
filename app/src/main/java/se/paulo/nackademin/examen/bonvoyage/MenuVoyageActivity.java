@@ -1,7 +1,9 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
@@ -12,13 +14,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -37,6 +42,12 @@ public class MenuVoyageActivity extends AppCompatActivity
     NewVoyageFragment voyageFragment = null;
     ShowVoyagesFragment showVoyagesFragment = null;
     SpendingFragment spendingFragment = null;
+
+    //From nav_header_menu.xml ==> DrawerView viewGroups..
+    TextView userName, userEmail;
+    SharedPreferences myPreferences;
+
+    NavigationView navHeadView;
 
     String destiny;
 
@@ -67,9 +78,24 @@ public class MenuVoyageActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
+        // Here we have control on actions in drawerView..
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // To change the TextViews in nav_header_menu layout..
+        View headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_menu, navigationView, false);
+        navigationView.addHeaderView(headerView);
+
+        userName = (TextView) headerView.findViewById(R.id.txtUsername);
+        userEmail = (TextView) headerView.findViewById(R.id.txtUserEmail);
+
+        //Retrieve information from SharedPreferences..
+        myPreferences = getSharedPreferences(LoginPage.USER_INFO_PREFERENCE, Context.MODE_PRIVATE);
+        userName.setText(myPreferences.getString("user_name", ""));
+        userEmail.setText(myPreferences.getString("user_email", ""));
+
+        Log.i("HEADER INFO","" + userName.getText().toString());
+        Log.i("HEADER INFO","" + userEmail.getText().toString());
 
     }
 
@@ -238,9 +264,9 @@ public class MenuVoyageActivity extends AppCompatActivity
         spend.setPlace(spendingFragment.place.getText().toString());
         spend.setDate(spendingFragment.dateSpending.getText().toString());
         spend.setCategory(spendingFragment.spinner.getSelectedItem().toString());
-        Toast.makeText(getApplicationContext(), "TESTANDO..." + spend.getValue() + " - " + spend.getDescription()
-                                                              + " - " + spend.getPlace() + " - " + spend.getDate()
-                + " - " + spend.getCategory(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "TESTANDO..."   + spend.getValue() + " - " + spend.getDescription()
+                                                                + " - " + spend.getPlace() + " - " + spend.getDate()
+                                                                + " - " + spend.getCategory(), Toast.LENGTH_SHORT).show();
     }
 
 

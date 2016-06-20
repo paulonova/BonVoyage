@@ -1,6 +1,8 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,8 @@ public class LoginPage extends AppCompatActivity {
     private DatabaseHelper helper;
     User user;
 
+    public static final String USER_INFO_PREFERENCE = "user_info";
+
 
 
     @Override
@@ -41,13 +45,12 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 if(checkUserInfo(username.getText().toString(), password.getText().toString())){
                     Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
                     startActivity(intent);
                     String name = helper.getUserInfo(username.getText().toString()).getUsername();
                     Toast.makeText(getApplicationContext(), "Welcome " + name, Toast.LENGTH_SHORT).show();
+                    saveUserInfoInSharedPreferences(name);
                     finish();
                 }else{
                     String msg = "Username or Password is wrong! try again..";
@@ -69,24 +72,50 @@ public class LoginPage extends AppCompatActivity {
     public boolean checkUserInfo(String username, String password){
 
         user = new User();
-        int id = helper.getUserInfo(username).getUser_id();
-        String name = helper.getUserInfo(username).getUsername();
-        String passw = helper.getUserInfo(username).getPassword();
-        String email = helper.getUserInfo(username).getEmail();
-        Log.i("USER_ID", "" + id + " - " + name + " - " + passw + " - " + email);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT username, password, email FROM user WHERE _id=" + id, null);
-        cursor.moveToFirst();
 
-        for (int i = 0; i <cursor.getCount() ; i++) {
-            user.setUsername(cursor.getString(0));
-            user.setPassword(cursor.getString(1));
-            user.setEmail(cursor.getString(2));
-            cursor.moveToNext();
+        if(!username.equals("") || !password.equals("")){ //*******?????????????????????????????
+
+            int id = helper.getUserInfo(username).getUser_id();
+
+            //Getting from Database all user information to login and everything else..
+            String user_name = helper.getUserInfo(username).getUsername();
+            String user_password = helper.getUserInfo(username).getPassword();
+            String user_email = helper.getUserInfo(username).getEmail();
+            Log.i("USER_ID", "" + id + " - " + user_name + " - " + user_password + " - " + user_email);
+
+            SQLiteDatabase db = helper.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT username, password, email FROM user WHERE _id=" + id, null);
+            cursor.moveToFirst();
+
+            for (int i = 0; i <cursor.getCount() ; i++) {
+                user.setUsername(cursor.getString(0));
+                user.setPassword(cursor.getString(1));
+                user.setEmail(cursor.getString(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+
+            return user.getUsername().equals(username) && user.getPassword().equals(password);
+
+        }else {
+
+            Toast.makeText(getApplicationContext(), "Fields cannot be empty..", Toast.LENGTH_SHORT).show();
+            return false;
         }
-        cursor.close();
 
-        return user.getUsername().equals(username) && user.getPassword().equals(password);
 
+    }
+
+    public void saveUserInfoInSharedPreferences(String username){
+
+        SharedPreferences preferences = getSharedPreferences(USER_INFO_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("user_id", helper.getUserInfo(username).getUser_id());
+        editor.putString("user_name", helper.getUserInfo(username).getUsername());
+        editor.putString("user_password", helper.getUserInfo(username).getPassword());
+        editor.putString("user_email", helper.getUserInfo(username).getEmail());
+        editor.apply();
+
+        Log.i("SharedPreferences", "**Saved in Preferences**");
     }
 }
