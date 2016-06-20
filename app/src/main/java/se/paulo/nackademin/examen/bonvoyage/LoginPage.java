@@ -1,6 +1,8 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ public class LoginPage extends AppCompatActivity {
     EditText username, password;
     private DatabaseHelper helper;
     User user;
+    private AlertDialog alert;
 
     public static final String USER_INFO_PREFERENCE = "user_info";
 
@@ -73,36 +76,34 @@ public class LoginPage extends AppCompatActivity {
 
         user = new User();
 
-        if(!username.equals("") || !password.equals("")){ //*******?????????????????????????????
+                if(!username.equals("") || !password.equals("")){
 
-            int id = helper.getUserInfo(username).getUser_id();
+                    //Getting from Database all user information to login and everything else..
+                    int user_id = helper.getUserInfo(username).getUser_id();
+                    String user_name = helper.getUserInfo(username).getUsername();
+                    String user_password = helper.getUserInfo(username).getPassword();
+                    String user_email = helper.getUserInfo(username).getEmail();
+                    Log.i("USER_ID", "" + user_id + " - " + user_name + " - " + user_password + " - " + user_email);
 
-            //Getting from Database all user information to login and everything else..
-            String user_name = helper.getUserInfo(username).getUsername();
-            String user_password = helper.getUserInfo(username).getPassword();
-            String user_email = helper.getUserInfo(username).getEmail();
-            Log.i("USER_ID", "" + id + " - " + user_name + " - " + user_password + " - " + user_email);
+                    SQLiteDatabase db = helper.getReadableDatabase();
+                    Cursor cursor = db.rawQuery("SELECT username, password, email FROM user WHERE _id=" + user_id, null);
+                    cursor.moveToFirst();
 
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT username, password, email FROM user WHERE _id=" + id, null);
-            cursor.moveToFirst();
+                    for (int i = 0; i <cursor.getCount() ; i++) {
+                        user.setUsername(cursor.getString(0));
+                        user.setPassword(cursor.getString(1));
+                        user.setEmail(cursor.getString(2));
+                        cursor.moveToNext();
+                    }
+                    cursor.close();
 
-            for (int i = 0; i <cursor.getCount() ; i++) {
-                user.setUsername(cursor.getString(0));
-                user.setPassword(cursor.getString(1));
-                user.setEmail(cursor.getString(2));
-                cursor.moveToNext();
+                    return user.getUsername().equals(username) && user.getPassword().equals(password);
+
+                }else {
+
+                    Toast.makeText(getApplicationContext(), "Fields cannot be empty..", Toast.LENGTH_SHORT).show();
+                    return false;
             }
-            cursor.close();
-
-            return user.getUsername().equals(username) && user.getPassword().equals(password);
-
-        }else {
-
-            Toast.makeText(getApplicationContext(), "Fields cannot be empty..", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
 
     }
 
@@ -118,4 +119,43 @@ public class LoginPage extends AppCompatActivity {
 
         Log.i("SharedPreferences", "**Saved in Preferences**");
     }
+
+    /**
+     * Method to use when onBackPressed() is used.
+     */
+    public void alertBeforeClose() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert");
+        builder.setMessage(R.string.close_alert);
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do Nothing
+            }
+        });
+
+        alert = builder.create();
+        alert.show();
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        alertBeforeClose();
+
+    }
+
+
 }

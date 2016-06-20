@@ -1,9 +1,12 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 
@@ -42,14 +46,13 @@ public class MenuVoyageActivity extends AppCompatActivity
     NewVoyageFragment voyageFragment = null;
     ShowVoyagesFragment showVoyagesFragment = null;
     SpendingFragment spendingFragment = null;
+    private DatabaseHelper helper;
 
     //From nav_header_menu.xml ==> DrawerView viewGroups..
     TextView userName, userEmail;
     SharedPreferences myPreferences;
 
-    NavigationView navHeadView;
-
-    String destiny;
+    int currentUserId;
 
 
     @Override
@@ -78,6 +81,9 @@ public class MenuVoyageActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Prepare access to database..
+        helper = new DatabaseHelper(this);
+
         // Here we have control on actions in drawerView..
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -93,9 +99,11 @@ public class MenuVoyageActivity extends AppCompatActivity
         myPreferences = getSharedPreferences(LoginPage.USER_INFO_PREFERENCE, Context.MODE_PRIVATE);
         userName.setText(myPreferences.getString("user_name", ""));
         userEmail.setText(myPreferences.getString("user_email", ""));
+        currentUserId = myPreferences.getInt("user_id", 0);
 
         Log.i("HEADER INFO","" + userName.getText().toString());
         Log.i("HEADER INFO","" + userEmail.getText().toString());
+        Log.i("USER ID","" + currentUserId);
 
     }
 
@@ -189,6 +197,8 @@ public class MenuVoyageActivity extends AppCompatActivity
                 break;
 
             case R.id.settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
 
                 break;
 
@@ -231,6 +241,8 @@ public class MenuVoyageActivity extends AppCompatActivity
 
 
     public void saveTrip(View v){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
         voyage = new Voyage();
 
         int type = voyageFragment.radioGroup.getCheckedRadioButtonId();
@@ -245,12 +257,38 @@ public class MenuVoyageActivity extends AppCompatActivity
         voyage.setNumberPeoples(Integer.parseInt(voyageFragment.numberPerson.getText().toString()));
         voyage.setArrivalDate(voyageFragment.arrivalBtn.getText().toString());
         voyage.setExitDate(voyageFragment.exitBtn.getText().toString());
+        voyage.setUser_id(currentUserId);
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put("destiny", voyage.getDestiny());
+            values.put("type_voyage", voyage.getTypeTrip());
+            values.put("arrive_date", voyage.getArrivalDate());
+            values.put("exit_date", voyage.getExitDate());
+            values.put("budget", voyage.getBudget());
+            values.put("number_peoples", voyage.getNumberPeoples());
+            values.put("user_id", currentUserId);
+
+            long result = db.insert("voyage", null, values);
+            if (result != -1) {
+                Toast.makeText(MenuVoyageActivity.this, "Voyage was inserted successfully!", Toast.LENGTH_SHORT).show();
+                Log.i("INSERT DATABASE", "SUCCESSFULLY");
+            }
+
+        }catch (SQLiteException e){
+            Toast.makeText(MenuVoyageActivity.this, "Voyage was not inserted!", Toast.LENGTH_SHORT).show();
+            Log.i("INSERT DATABASE", "NOT-SUCCESSFULLY " + e.getMessage());
+        }
+
+        finish();
+        startActivity(getIntent());
 
         Log.e("Test Text: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
                                 + " : " + voyage.getTypeTrip() + " : " + voyage.getArrivalDate()
                                 + " : " + voyage.getExitDate() );
         Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples() , Toast.LENGTH_SHORT).show();
     }
+
 
 
 
