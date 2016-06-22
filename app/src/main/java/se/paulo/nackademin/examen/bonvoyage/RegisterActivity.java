@@ -78,28 +78,44 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         SQLiteDatabase db = helper.getReadableDatabase();
 
-        try {
+        if(fieldsValidation(user.getUsername(), user.getPassword(), user.getEmail())){
 
-            ContentValues values = new ContentValues();
-            values.put("username", user.getUsername());
-            values.put("password", user.getPassword());
-            values.put("email", user.getEmail());
+            try {
 
-            long result = db.insert("user", null, values);
+                ContentValues values = new ContentValues();
+                values.put("username", user.getUsername());
+                values.put("password", user.getPassword());
+                values.put("email", user.getEmail());
 
-            if (result != -1) {
-                Toast.makeText(this, "Register saved successfully..", Toast.LENGTH_SHORT).show();
-                finish();
+                long result = db.insert("user", null, values);
+
+                if (result != -1) {
+                    Toast.makeText(this, "Register saved successfully..", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+            }catch (SQLiteException e){
+                Log.e("SQLiteException","" + e.getMessage());
+                Toast.makeText(this, "Register NOT saved! ", Toast.LENGTH_SHORT).show();
             }
-
-        }catch (SQLiteException e){
-            Log.e("SQLiteException","" + e.getMessage());
-            Toast.makeText(this, "Register NOT saved! ", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getApplicationContext(), "Fields are empty! \n Insert some information..", Toast.LENGTH_SHORT).show();
         }
+
+
 
 
         String msg = user.getUsername() + " - " + user.getPassword() + " - " + user.getEmail();
         Log.i("USER INFO","" + msg);
+
+    }
+
+    public boolean fieldsValidation(String username, String password, String email){
+
+        if(!username.equals("") && !password.equals("") && !email.equals("")){
+            return true;
+        }
+        return false;
 
     }
 

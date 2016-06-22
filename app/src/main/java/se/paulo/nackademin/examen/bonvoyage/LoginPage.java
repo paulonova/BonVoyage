@@ -26,7 +26,7 @@ public class LoginPage extends AppCompatActivity {
     EditText username, password;
     private DatabaseHelper helper;
     User user;
-    private AlertDialog alert;
+    AlertDialog alert;
 
     public static final String USER_INFO_PREFERENCE = "user_info";
 
@@ -48,17 +48,25 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(checkUserInfo(username.getText().toString(), password.getText().toString())){
-                    Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
-                    startActivity(intent);
-                    String name = helper.getUserInfo(username.getText().toString()).getUsername();
-                    Toast.makeText(getApplicationContext(), "Welcome " + name, Toast.LENGTH_SHORT).show();
-                    saveUserInfoInSharedPreferences(name);
-                    finish();
-                }else{
-                    String msg = "Username or Password is wrong! try again..";
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                if(checkIfDatabaseIsEmpty()){
+
+                        if(checkUserInfo(username.getText().toString(), password.getText().toString())){
+                            Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+                            startActivity(intent);
+                            String name = helper.getUserInfo(username.getText().toString()).getUsername();
+                            Toast.makeText(getApplicationContext(), "Welcome " + name, Toast.LENGTH_SHORT).show();
+                            saveUserInfoInSharedPreferences(name);
+                            finish();
+                        }else{
+                            String msg = "Username or Password is wrong! try again..";
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        }
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "No user information has found! \n Register first..", Toast.LENGTH_SHORT).show();
                 }
+
+
 
 
             }
@@ -76,7 +84,7 @@ public class LoginPage extends AppCompatActivity {
 
         user = new User();
 
-                if(!username.equals("") || !password.equals("")){
+                if(!username.equals("") && !password.equals("")){
 
                     //Getting from Database all user information to login and everything else..
                     int user_id = helper.getUserInfo(username).getUser_id();
@@ -103,7 +111,22 @@ public class LoginPage extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "Fields cannot be empty..", Toast.LENGTH_SHORT).show();
                     return false;
-            }
+                }
+
+        }
+
+
+    public boolean checkIfDatabaseIsEmpty(){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String count = "SELECT * FROM user";
+        Cursor cursor = db.rawQuery(count, null);
+        boolean a =  cursor.moveToFirst();
+        Log.i("Empty database", "" + a);
+
+        cursor.close();
+        return a;
+
+
 
     }
 
