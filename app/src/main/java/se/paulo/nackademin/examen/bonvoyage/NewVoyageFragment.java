@@ -1,13 +1,16 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,10 +110,12 @@ public class NewVoyageFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_new_voyage, container, false);
+
 
         arrivalBtn = (Button)rootView.findViewById(R.id.arrivalBtn);
         exitBtn = (Button)rootView.findViewById(R.id.exitBtn);

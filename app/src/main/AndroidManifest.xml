@@ -41,15 +41,6 @@
             android:name=".RegisterActivity"
             android:label="@string/register" />
         <activity
-            android:name=".SpendingActivity"
-            android:label="@string/title_activity_spending"
-            android:parentActivityName=".MenuVoyageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MenuVoyageActivity" />
-        </activity>
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MenuVoyageActivity">

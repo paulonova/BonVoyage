@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -60,6 +62,8 @@ public class MenuVoyageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        //Lock screen in ORIENTATION_PORTRAIT / don´t crash the Fragments..
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //This is the first view in DrawerLayout..
         FirstAppInfoFragment firstAppInfoFragment = new FirstAppInfoFragment();
@@ -280,14 +284,18 @@ public class MenuVoyageActivity extends AppCompatActivity
             Log.i("INSERT DATABASE", "NOT-SUCCESSFULLY " + e.getMessage());
         }
 
-        finish();
-        startActivity(getIntent());
-
         Log.e("Test Text: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
                                 + " : " + voyage.getTypeTrip() + " : " + voyage.getArrivalDate()
                                 + " : " + voyage.getExitDate() );
-        Toast.makeText(getApplicationContext(), "TESTANDO..." + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples() , Toast.LENGTH_SHORT).show();
+
+        finish();
+        startActivity(getIntent());
+
+
+
     }
+
+
 
 
 
@@ -295,6 +303,8 @@ public class MenuVoyageActivity extends AppCompatActivity
     // ************************************************ IMPLEMENTING OF SPENDING FRAGMENT ****************************************************
 
     public void saveSpending(View v){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
         Spending spend = new Spending();
 
         spend.setValue(Double.parseDouble(spendingFragment.value.getText().toString()));
@@ -302,10 +312,30 @@ public class MenuVoyageActivity extends AppCompatActivity
         spend.setPlace(spendingFragment.place.getText().toString());
         spend.setDate(spendingFragment.dateSpending.getText().toString());
         spend.setCategory(spendingFragment.spinner.getSelectedItem().toString());
-        Toast.makeText(getApplicationContext(), "TESTANDO..."   + spend.getValue() + " - " + spend.getDescription()
-                                                                + " - " + spend.getPlace() + " - " + spend.getDate()
-                                                                + " - " + spend.getCategory(), Toast.LENGTH_SHORT).show();
-    }
 
+        try {
+            ContentValues values = new ContentValues();
+            values.put("category", spend.getCategory());
+            values.put("date", spend.getDate());
+            values.put("place", spend.getPlace());
+            values.put("description", spend.getDescription());
+            values.put("value", spend.getValue());
+
+            long result = db.insert("spending", null, values);
+            if (result != -1) {
+                Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
+                Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
+            }
+
+        }catch (SQLiteException e){
+            Toast.makeText(MenuVoyageActivity.this, "Spending was not inserted!", Toast.LENGTH_SHORT).show();
+            Log.i("DATABASE", "INSERT NOT-SUCCESSFULLY " + e.getMessage());
+        }
+
+        finish();
+        startActivity(getIntent());
+
+
+    }
 
 }
