@@ -166,6 +166,9 @@
     <string name="restore_simple">Delete Voyages</string>
     <string name="simple_alert_restore">Database will delete and restore only user´s voyage, Are you sure?</string>
     <string name="close_alert">This application will close! Are you sure?</string>
+    <string name="place_you_go">Place you go</string>
+    <string name="date_you_go">Date you go</string>
+    <string name="budget_you_have">Budget you have</string>
 
 
 </resources>

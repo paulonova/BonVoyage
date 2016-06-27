@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/img_type_voyage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:background="@android:color/holo_green_dark"/>
+
+    <LinearLayout
+        android:layout_toEndOf="@id/img_type_voyage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="5dp"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/txtPlaceYouGo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/place_you_go"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/txtDateYouGo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date_you_go"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/txtBudgetYouHave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/budget_you_have"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            style="@android:style/Widget.ProgressBar.Horizontal"/>
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

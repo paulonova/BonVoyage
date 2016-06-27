@@ -46,7 +46,6 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
-    ShowVoyagesFragment showVoyagesFragment = null;
     SpendingFragment spendingFragment = null;
     private DatabaseHelper helper;
 
@@ -134,14 +133,17 @@ public class MenuVoyageActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent intent;
 
         switch (id){
+
             case R.id.action_settings:
-                Toast.makeText(MenuVoyageActivity.this, "Settings was selected!", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.action_info:
-                Intent intent = new Intent(this, BonVoyageInfoActivity.class);
+                intent = new Intent(this, BonVoyageInfoActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -194,10 +196,10 @@ public class MenuVoyageActivity extends AppCompatActivity
 
             case R.id.show_voyages:
 
-                showVoyagesFragment = new ShowVoyagesFragment();
-                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, showVoyagesFragment);
-                fragmentVoyageTransaction.commit();
+//                showVoyagesFragment = new ShowVoyagesFragment();
+//                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, showVoyagesFragment);
+//                fragmentVoyageTransaction.commit();
                 break;
 
             case R.id.settings:
