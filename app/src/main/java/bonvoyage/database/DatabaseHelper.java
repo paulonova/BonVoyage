@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import bonvoyage.objects.Spending;
 import bonvoyage.objects.User;
 import bonvoyage.objects.Voyage;
 
@@ -71,7 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Method to get user information..
-    //CONSTRUCTOR ==> public User(String username, String email, String password, int user_id)
     public User getUserInfo(String username){
 
         User user = null;
@@ -96,14 +96,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /*              "destiny TEXT," +
-                    "type_voyage TEXT," +
-                    "arrive_date DATE," +
-                    "exit_date DATE," +
-                    "budget DOUBLE," +
-                    "number_peoples INTEGER," +
-                    "user_id INTEGER," +*/
 
+    public Voyage getVoyageInfo(int userId){
+
+        Voyage voyage = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {"_id", "user_id", "destiny", "typeVoyage", "arrivalDate", "exitDate", "budget","numberPeoples", "actualTrip"};
+        String selection = "user_id=?";
+        String[]selectArgs = {userId + ""};
+
+        Cursor cursor = db.query("voyage", projection, selection,selectArgs, null, null, null);
+
+        if(cursor.moveToFirst()){
+
+            //public Voyage(Integer id, Integer user_id, String destiny, String typeTrip, String arrivalDate, String exitDate, Double budget, Integer numberPeoples, Integer actualTrip)
+            voyage = new Voyage(
+                    cursor.getInt(0),
+                    cursor.getInt(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getDouble(6),
+                    cursor.getInt(7),
+                    cursor.getInt(8));
+        }
+
+        cursor.close();
+        return voyage;
+
+    }
+
+    public Spending getSpendingInfo(int voyageId){
+
+        //public Spending(Integer id, String date, String category, String description, Double value, String place, Integer voyageId) {
+
+        Spending spending = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {"_id", "date", "category", "description", "value", "place", "voyageId"};
+        String selection = "voyage_id=?";
+        String[]selectArgs = {voyageId + ""};
+
+        Cursor cursor = db.query("voyage", projection, selection,selectArgs, null, null, null);
+
+        if(cursor.moveToFirst()){
+
+            spending = new Spending(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getDouble(4),
+                    cursor.getString(5),
+                    cursor.getInt(6));
+
+        }
+
+        cursor.close();
+        return spending;
+
+    }
 
 
     public void alertOmDatabase (Context context, String title, String message ) {

@@ -18,26 +18,26 @@ public class Voyage {
     private Integer id;
     private Integer user_id;
     private String destiny;
-    private String typeTrip;
+    private String typeVoyage;
     private String arrivalDate;
     private String exitDate;
     private Double budget;
     private Integer numberPeoples;
-    private Integer actualTrip;
+    private Integer actualVoyage;
 
     //Constructor
 
 
-    public Voyage(Integer id, Integer user_id, String destiny, String typeTrip, String arrivalDate, String exitDate, Double budget, Integer numberPeoples, Integer actualTrip) {
+    public Voyage(Integer id, Integer user_id, String destiny, String typeVoyage, String arrivalDate, String exitDate, Double budget, Integer numberPeoples, Integer actualVoyage) {
         this.id = id;
         this.user_id = user_id;
         this.destiny = destiny;
-        this.typeTrip = typeTrip;
+        this.typeVoyage = typeVoyage;
         this.arrivalDate = arrivalDate;
         this.exitDate = exitDate;
         this.budget = budget;
         this.numberPeoples = numberPeoples;
-        this.actualTrip = actualTrip;
+        this.actualVoyage = actualVoyage;
     }
 
     //Empty Constructor
@@ -68,12 +68,12 @@ public class Voyage {
         this.destiny = destiny;
     }
 
-    public String getTypeTrip() {
-        return typeTrip;
+    public String getTypeVoyage() {
+        return typeVoyage;
     }
 
-    public void setTypeTrip(String typeTrip) {
-        this.typeTrip = typeTrip;
+    public void setTypeVoyage(String typeVoyage) {
+        this.typeVoyage = typeVoyage;
     }
 
     public String getArrivalDate() {
@@ -108,11 +108,11 @@ public class Voyage {
         this.numberPeoples = numberPeoples;
     }
 
-    public Integer getActualTrip() {
-        return actualTrip;
+    public Integer getActualVoyage() {
+        return actualVoyage;
     }
 
-    public void setActualTrip(Integer actualTrip) {
-        this.actualTrip = actualTrip;
+    public void setActualVoyage(Integer actualVoyage) {
+        this.actualVoyage = actualVoyage;
     }
 }

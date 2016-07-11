@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,8 @@ public class LoginPage extends AppCompatActivity {
     User user;
     AlertDialog alert;
 
+    public static final String DEFAULT_CONNECTED = "be_connected";
+    public static CheckBox beConnected;
     public static final String USER_INFO_PREFERENCE = "user_info";
 
 
@@ -39,6 +43,21 @@ public class LoginPage extends AppCompatActivity {
 
         username = (EditText)findViewById(R.id.edt_login_username);
         password = (EditText)findViewById(R.id.edt_login_password);
+        beConnected = (CheckBox)findViewById(R.id.cbxKeepInlog);
+
+        //Getting info if the checkBox is checked or not..
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean checked = preferences.getBoolean(DEFAULT_CONNECTED, false);
+        Log.d("DEFAULT_CONNECTED", "Value: " + checked);
+
+        if(!checked){
+            //do nothing
+            Log.i("CHECKBOX login","NOT CHECKED!!");
+        }else{
+            Log.i("CHECKBOX login","CHECKED!!");
+            startActivity(new Intent(this, MenuVoyageActivity.class));
+            finish();
+        }
 
         // Prepare access to database..
         helper = new DatabaseHelper(this);
@@ -51,6 +70,14 @@ public class LoginPage extends AppCompatActivity {
                 if(checkIfDatabaseIsEmpty()){
 
                         if(checkUserInfo(username.getText().toString(), password.getText().toString())){
+
+                            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(LoginPage.this);
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putBoolean(DEFAULT_CONNECTED, beConnected.isChecked());
+                            Log.d("CheckBox Default", "Value: " + beConnected.isChecked());
+                            editor.apply();
+
+
                             Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
                             startActivity(intent);
                             String name = helper.getUserInfo(username.getText().toString()).getUsername();

@@ -170,6 +170,7 @@
     <string name="date_you_go">Date you go</string>
     <string name="budget_you_have">Budget you have</string>
     <string name="title_activity_voyage_list_viewer">Voyage Viewer</string>
+    <string name="title_activity_voyage_list">Voyage List</string>
 
 
 </resources>

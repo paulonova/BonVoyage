@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,11 +21,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TabHost;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,10 +39,12 @@ public class MenuVoyageActivity extends AppCompatActivity
     Toolbar toolbar = null;
     Voyage voyage;
 
+    public static final String SPENDING_PREFERENCE = "spending_info";
+    public static final String VOYAGE_PREFERENCE = "voyage_info";
+
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
-    VoyageListFragment voyageListFragment = null;
     private DatabaseHelper helper;
 
     //From nav_header_menu.xml ==> DrawerView viewGroups..
@@ -55,6 +52,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     SharedPreferences myPreferences;
 
     int currentUserId;
+    CheckBox beConnected;
 
 
     @Override
@@ -197,10 +195,13 @@ public class MenuVoyageActivity extends AppCompatActivity
 
             case R.id.show_voyages:
 
-                voyageListFragment = new VoyageListFragment();
-                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, voyageListFragment);
-                fragmentVoyageTransaction.commit();
+                Intent intentVoyage = new Intent(this, VoyageListActivity.class);
+                intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentVoyage);
+//                voyageListFragment = new VoyageListFragment();
+//                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, voyageListFragment);
+//                fragmentVoyageTransaction.commit();
                 break;
 
             case R.id.settings:
@@ -220,6 +221,13 @@ public class MenuVoyageActivity extends AppCompatActivity
                 break;
 
             case R.id.logout:
+
+                //make de checkBox NOT CHECKED!
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean(LoginPage.DEFAULT_CONNECTED, false);
+                editor.commit();
+
                 Intent logout = new Intent(this, LoginPage.class);
                 logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout);
@@ -254,9 +262,9 @@ public class MenuVoyageActivity extends AppCompatActivity
 
         int type = voyageFragment.radioGroup.getCheckedRadioButtonId();
         if(type == R.id.vacationBtn){
-            voyage.setTypeTrip(getString(R.string.vacation));
+            voyage.setTypeVoyage(getString(R.string.vacation));
         }else{
-            voyage.setTypeTrip(getString(R.string.business));
+            voyage.setTypeVoyage(getString(R.string.business));
         }
 
         voyage.setDestiny(voyageFragment.destination.getText().toString());
@@ -269,7 +277,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         try {
             ContentValues values = new ContentValues();
             values.put("destiny", voyage.getDestiny());
-            values.put("type_voyage", voyage.getTypeTrip());
+            values.put("type_voyage", voyage.getTypeVoyage());
             values.put("arrive_date", voyage.getArrivalDate());
             values.put("exit_date", voyage.getExitDate());
             values.put("budget", voyage.getBudget());
@@ -282,20 +290,41 @@ public class MenuVoyageActivity extends AppCompatActivity
                 Log.i("INSERT DATABASE", "SUCCESSFULLY");
             }
 
+            //Save voyage info to retrieve before.
+            saveVoyageInSharedPreferences(currentUserId);
+
         }catch (SQLiteException e){
             Toast.makeText(MenuVoyageActivity.this, "Voyage was not inserted!", Toast.LENGTH_SHORT).show();
             Log.i("INSERT DATABASE", "NOT-SUCCESSFULLY " + e.getMessage());
         }
 
         Log.e("Test Text: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
-                                + " : " + voyage.getTypeTrip() + " : " + voyage.getArrivalDate()
+                                + " : " + voyage.getTypeVoyage() + " : " + voyage.getArrivalDate()
                                 + " : " + voyage.getExitDate() );
 
         finish();
         startActivity(getIntent());
+    }
 
 
 
+    public void saveVoyageInSharedPreferences(int userId){
+
+        SharedPreferences preferences = getSharedPreferences(VOYAGE_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("destiny", helper.getVoyageInfo(userId).getDestiny());
+        editor.putString("type_voyage", helper.getVoyageInfo(userId).getTypeVoyage());
+        editor.putString("arrive_date", helper.getVoyageInfo(userId).getArrivalDate());
+        editor.putString("exit_date", helper.getVoyageInfo(userId).getExitDate());
+        editor.putInt("budget", helper.getVoyageInfo(userId).getBudget().intValue());
+        editor.putInt("number_peoples", helper.getVoyageInfo(userId).getNumberPeoples());
+        editor.putInt("user_id", helper.getVoyageInfo(userId).getUser_id());
+        editor.putInt("current_voyage", helper.getVoyageInfo(userId).getActualVoyage());
+
+        editor.apply();
+
+        Log.i("SharedPreferences", "** VOYAGE - Saved in Preferences**");
     }
 
 
@@ -315,6 +344,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         spend.setPlace(spendingFragment.place.getText().toString());
         spend.setDate(spendingFragment.dateSpending.getText().toString());
         spend.setCategory(spendingFragment.spinner.getSelectedItem().toString());
+        //spend.setVoyageId(spendingFragment.);
 
         try {
             ContentValues values = new ContentValues();
@@ -323,12 +353,14 @@ public class MenuVoyageActivity extends AppCompatActivity
             values.put("place", spend.getPlace());
             values.put("description", spend.getDescription());
             values.put("value", spend.getValue());
+            values.put("voyage_id", spend.getVoyageId());
 
             long result = db.insert("spending", null, values);
             if (result != -1) {
                 Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
                 Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
             }
+
 
         }catch (SQLiteException e){
             Toast.makeText(MenuVoyageActivity.this, "Spending was not inserted!", Toast.LENGTH_SHORT).show();
@@ -337,8 +369,8 @@ public class MenuVoyageActivity extends AppCompatActivity
 
         finish();
         startActivity(getIntent());
-
-
     }
+
+
 
 }
