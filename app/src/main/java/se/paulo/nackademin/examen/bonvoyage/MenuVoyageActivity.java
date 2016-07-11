@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -38,9 +39,11 @@ public class MenuVoyageActivity extends AppCompatActivity
     NavigationView navigationView = null;
     Toolbar toolbar = null;
     Voyage voyage;
+    Spending spending;
 
     public static final String SPENDING_PREFERENCE = "spending_info";
     public static final String VOYAGE_PREFERENCE = "voyage_info";
+    VoyageListActivity voyageListActivity;
 
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
@@ -336,39 +339,145 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     public void saveSpending(View v){
 
-        SQLiteDatabase db = helper.getWritableDatabase();
-        Spending spend = new Spending();
+        voyageListActivity = new VoyageListActivity();
 
-        spend.setValue(Double.parseDouble(spendingFragment.value.getText().toString()));
-        spend.setDescription(spendingFragment.description.getText().toString());
-        spend.setPlace(spendingFragment.place.getText().toString());
-        spend.setDate(spendingFragment.dateSpending.getText().toString());
-        spend.setCategory(spendingFragment.spinner.getSelectedItem().toString());
-        //spend.setVoyageId(spendingFragment.);
+        if(checkEmptyData()){
 
-        try {
-            ContentValues values = new ContentValues();
-            values.put("category", spend.getCategory());
-            values.put("date", spend.getDate());
-            values.put("place", spend.getPlace());
-            values.put("description", spend.getDescription());
-            values.put("value", spend.getValue());
-            values.put("voyage_id", spend.getVoyageId());
+            saveSpendingsToObjectSpending();
+            SQLiteDatabase db = helper.getWritableDatabase();
 
-            long result = db.insert("spending", null, values);
-            if (result != -1) {
-                Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
-                Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
+            if(isFromVoyageList()){
+                insertInSelectedVoyage(spending.getCategory(), spending.getDate(), spending.getValue(), spending.getDescription(), spending.getPlace(), retrieveSelectedVoyageID());
+                Log.i("Comming from VoyageList", spending.getCategory() + spending.getDate() + spending.getValue() + spending.getDescription() + spending.getPlace() + retrieveSelectedVoyageID());
+                finish();
+
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("category", spending.getCategory());
+                values.put("date", spending.getDate());
+                values.put("place", spending.getPlace());
+                values.put("description", spending.getDescription());
+                values.put("value", spending.getValue());
+                values.put("voyage_id", spending.getVoyageId());
+
+                long result = db.insert("spending", null, values);
+                if (result != -1) {
+                    Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
+                    Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
+                }
             }
 
-
-        }catch (SQLiteException e){
-            Toast.makeText(MenuVoyageActivity.this, "Spending was not inserted!", Toast.LENGTH_SHORT).show();
-            Log.i("DATABASE", "INSERT NOT-SUCCESSFULLY " + e.getMessage());
+        }else{
+            Toast.makeText(getApplicationContext(), R.string.no_trip_msg, Toast.LENGTH_LONG).show();
+            finish();
         }
 
         finish();
         startActivity(getIntent());
+    }
+
+
+    public boolean checkEmptyData(){
+        // Get the actual id..
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String sql = "SELECT _id FROM voyage WHERE user_id=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{Integer.toString(currentUserId)}); // null can be replaced by WHERE argument..
+        boolean data = cursor.moveToLast();    // To get the last Voyage table register
+
+        Log.d("checkEmptyData"," Value: " + data);
+        return data;
+
+    }
+
+    public void saveSpendingsToObjectSpending(){
+
+        // Get the actual id..
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String sql = "SELECT _id FROM voyage WHERE user_id=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{Integer.toString(currentUserId)});
+        cursor.moveToLast();
+        int voyageId = cursor.getInt(0);
+        Log.d("TripId from spending", "tripId: " + voyageId);
+
+        try {
+            spending = new Spending();
+
+            if(spendingFragment.value.getText().toString().equals("")){
+                spending.setValue(0d); //Double
+            }else{
+                spending.setValue(Double.parseDouble(spendingFragment.value.getText().toString()));
+            }
+
+            spending.setDescription(spendingFragment.description.getText().toString());
+            spending.setPlace(spendingFragment.place.getText().toString());
+            spending.setDate(spendingFragment.dateSpending.getText().toString());
+            spending.setCategory(spendingFragment.spinner.getSelectedItem().toString());
+            spending.setVoyageId(voyageId);
+
+            Log.d("Saved on Spending", "values: " + spending.getCategory() + " - " + spending.getDate() + " - " +
+                    spending.getValue() + " - " + spending.getDescription() + " - " + spending.getPlace() + " actualID: " + spending.getVoyageId());
+
+
+        }catch (NumberFormatException e){
+            Toast.makeText(getApplicationContext(), "Spending was not saved: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("Spending not saved: ", ">>: " + e.getMessage());
+
+        }
+
+    }
+
+    // Get from Bundle Extra the selected trip _id..
+    public boolean isFromVoyageList(){
+
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        if(b!=null){
+            boolean result = b.getBoolean("isFromVoyageList");
+            Log.d("isFromVoyageList", "Bundle Extra: " + result);
+            return result;
+        }else {
+            Log.d("isFromVoyageList", "Bundle Extra: " + "FALSE");
+            return false;
+        }
+    }
+
+    // Used to save spendings in the selected trip from TripList Activity..
+    public void insertInSelectedVoyage(String category, String date, double value, String description, String place, int itemId){
+
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("category", category);
+        values.put("date", date);
+        values.put("value", value);
+        values.put("description", description);
+        values.put("place", place);
+        values.put("trip_id", itemId); // maybe it needs +1 because the first item is 0
+
+        long result = db.insert("spending", null, values);
+
+        if (result != -1) {
+            Toast.makeText(this, "Register saved successfully..", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Register NOT saved! ", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+    // Get from Bundle Extra the selected trip _id..
+    public int retrieveSelectedVoyageID(){
+
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        if(b!=null){
+            int result = b.getInt("CameFromVoyageList");
+            Log.d("DestinationID", "Bundle Extra: " + result);
+            return result;
+        }else {
+            return 0;
+        }
     }
 
 

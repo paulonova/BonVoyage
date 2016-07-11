@@ -39,7 +39,7 @@ public class SpendingFragment extends Fragment {
     private String selectedDate;
     private String actualDate;
 
-    private AlertDialog alert;
+    //private AlertDialog alert;
 
 
     Calendar spendCalendar = Calendar.getInstance();

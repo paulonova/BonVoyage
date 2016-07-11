@@ -124,13 +124,9 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
             double totalSpend = calcTotalSpend(db, id + "");
             setTotalSpend(totalSpend);
 
-
-            Log.d("Database Info TRIP", "Info: " + "ID: " + id + " - " + "TypeVoyage: " + typeVoyage + " - " +
+            Log.i("Database Info TRIP", "Info: " + "ID: " + id + " - " + "TypeVoyage: " + typeVoyage + " - " +
                     "Destiny: " + destiny + " - " + "ArrivalDate: " + arrivalDate + " - " +
                     "ExitDate: " + exitDate + " - " + "Budget: " + budget + " - Number of people: " + numberPeoples);
-
-            // public Voyage(Integer id, Integer user_id, String destiny, String typeVoyage, String arrivalDate, String exitDate, Double budget, Integer numberPeoples, Integer actualVoyage) {
-            //voyage = new Voyage(id, userId, destiny, typeVoyage, arrivalDate, exitDate, budget, numberPeoples, id);
 
             Map<String, Object> item = new HashMap<String, Object>();
 

@@ -133,7 +133,6 @@
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Delete &amp; restore database</string>
 
-    <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -171,6 +170,7 @@
     <string name="budget_you_have">Budget you have</string>
     <string name="title_activity_voyage_list_viewer">Voyage Viewer</string>
     <string name="title_activity_voyage_list">Voyage List</string>
+    <string name="no_trip_msg">There is no Voyage registered in database, please create a Voyage first..</string>
 
 
 </resources>
