@@ -32,23 +32,10 @@
             android:layout_marginBottom="20dp"
             android:layout_below="@id/how_it_works">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold|italic"
-                android:textColor="#00796b"
-                android:textAlignment="center"
-                android:text="@string/info_howitworks"/>
+
 
 
         </ScrollView>
-
-
-
-
-
-
 
     </RelativeLayout>
 

@@ -11,9 +11,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -44,6 +46,8 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
     SharedPreferences myPreferences;
     int currentUserId;
 
+    ImageButton imageButton;
+
     public static final String TRIP_VACATIONS = "Vacation";
     public static final String TRIP_BUSINESS = "Business";
 
@@ -52,6 +56,21 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voyage_list);
 
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        //Connecting to MenuVoyageActivity!
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imageButton = (ImageButton)findViewById(R.id.img_menu_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentVoyage = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+                intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentVoyage);
+                finish();
+            }
+        });
 
         helper = new DatabaseHelper(this);
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -63,7 +82,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         // Instantiate SharedPreferences and retrieve the limit value of the budget..
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String value = preferences.getString("value_limit", "50"); //deveria ser 0..
+        String value = preferences.getString("value_limit", "50"); // 0 to 100%
         Log.d("Limit Value Saved", "The Value is: " + value);
         limitValue = Double.valueOf(value);
 
@@ -79,17 +98,6 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         Log.i("LIST-VOYAGE","" + listVoyage().toString());
         getListView().setOnItemClickListener(this);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
     }
 

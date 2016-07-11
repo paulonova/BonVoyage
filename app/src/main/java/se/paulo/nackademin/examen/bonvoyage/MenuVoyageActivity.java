@@ -48,6 +48,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
+
     private DatabaseHelper helper;
 
     //From nav_header_menu.xml ==> DrawerView viewGroups..
@@ -201,6 +202,7 @@ public class MenuVoyageActivity extends AppCompatActivity
                 Intent intentVoyage = new Intent(this, VoyageListActivity.class);
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);
+
 //                voyageListFragment = new VoyageListFragment();
 //                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
 //                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, voyageListFragment);

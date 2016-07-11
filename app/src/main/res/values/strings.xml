@@ -171,6 +171,8 @@
     <string name="title_activity_voyage_list_viewer">Voyage Viewer</string>
     <string name="title_activity_voyage_list">Voyage List</string>
     <string name="no_trip_msg">There is no Voyage registered in database, please create a Voyage first..</string>
+    <string name="voyage_list">Voyage list</string>
+    <string name="img_button">Image Button</string>
 
 
 </resources>
