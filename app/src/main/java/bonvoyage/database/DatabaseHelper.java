@@ -97,11 +97,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
     public Voyage getVoyageInfo(int userId){
 
         Voyage voyage = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {"_id", "user_id", "destiny", "typeVoyage", "arrivalDate", "exitDate", "budget","numberPeoples", "actualTrip"};
+        String[] projection = {"_id", "user_id", "destiny", "type_voyage", "arrive_date", "exit_date", "budget","number_peoples"}; //, "actualTrip"
         String selection = "user_id=?";
         String[]selectArgs = {userId + ""};
 
@@ -119,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getDouble(6),
                     cursor.getInt(7),
-                    cursor.getInt(8));
+                    cursor.getInt(0));  //actualTrip = _id
         }
 
         cursor.close();
@@ -133,11 +134,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Spending spending = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {"_id", "date", "category", "description", "value", "place", "voyageId"};
+        String[] projection = {"_id", "date", "category", "description", "value", "place", "voyage_id"};
         String selection = "voyage_id=?";
         String[]selectArgs = {voyageId + ""};
 
-        Cursor cursor = db.query("voyage", projection, selection,selectArgs, null, null, null);
+        Cursor cursor = db.query("spending", projection, selection,selectArgs, null, null, null);
 
         if(cursor.moveToFirst()){
 

@@ -34,7 +34,7 @@ import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 
 public class MenuVoyageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+                                implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -299,11 +299,10 @@ public class MenuVoyageActivity extends AppCompatActivity
             saveVoyageInSharedPreferences(currentUserId);
 
         }catch (SQLiteException e){
-            Toast.makeText(MenuVoyageActivity.this, "Voyage was not inserted!", Toast.LENGTH_SHORT).show();
-            Log.i("INSERT DATABASE", "NOT-SUCCESSFULLY " + e.getMessage());
+            Log.e("SOMETHING WRONG", "NOT-SUCCESSFULLY " + e.getMessage());
         }
 
-        Log.e("Test Text: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
+        Log.e("Test database: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
                                 + " : " + voyage.getTypeVoyage() + " : " + voyage.getArrivalDate()
                                 + " : " + voyage.getExitDate() );
 
@@ -325,11 +324,11 @@ public class MenuVoyageActivity extends AppCompatActivity
         editor.putInt("budget", helper.getVoyageInfo(userId).getBudget().intValue());
         editor.putInt("number_peoples", helper.getVoyageInfo(userId).getNumberPeoples());
         editor.putInt("user_id", helper.getVoyageInfo(userId).getUser_id());
-        editor.putInt("current_voyage", helper.getVoyageInfo(userId).getActualVoyage());
+        editor.putInt("current_voyage", helper.getVoyageInfo(userId).getId());
 
         editor.apply();
 
-        Log.i("SharedPreferences", "** VOYAGE - Saved in Preferences**");
+        Log.d("SharedPreferences", "** VOYAGE - Saved in Preferences**" + helper.getVoyageInfo(userId).getId());
     }
 
 
