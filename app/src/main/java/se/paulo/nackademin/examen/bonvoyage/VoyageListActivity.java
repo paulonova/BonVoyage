@@ -1,5 +1,8 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,12 +36,22 @@ import bonvoyage.objects.Voyage;
 public class VoyageListActivity extends ListActivity implements AdapterView.OnItemClickListener,
                                                                 DialogInterface.OnClickListener, SimpleAdapter.ViewBinder{
 
-    String[] contactList = {"Person1","Person2","Person3","Person4","Person5","Person6"};
     private DatabaseHelper helper;
     private SimpleDateFormat dateFormat;
 
-    private List<Map<String, Object>> itemTrips;
     private Double limitValue;
+
+    private AlertDialog dialogConfirmation;
+    private AlertDialog alertDialog;
+
+    private long selectItemID;
+    private String selectedTripDestination;
+    private int selectedDestinationId;
+
+    SpendingFragment spendingFragment = null;
+
+    private int selectedVoyage;
+    private List<Map<String, Object>> itemVoyage;
 
     private double totalSpend;
     private double alertLimit;
@@ -99,6 +112,9 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
         Log.i("LIST-VOYAGE","" + listVoyage().toString());
         getListView().setOnItemClickListener(this);
 
+        this.alertDialog = buildAlertDialog();
+        this.dialogConfirmation = buildDialogConfirmation();
+
     }
 
 
@@ -108,7 +124,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
         String sql = "SELECT _id, type_voyage, destiny, arrive_date, exit_date, budget, number_peoples, user_id FROM voyage WHERE user_id=" + currentUserId;
         Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
-        itemTrips = new ArrayList<Map<String, Object>>();
+        itemVoyage = new ArrayList<Map<String, Object>>();
         Voyage voyage;
 
 
@@ -156,14 +172,28 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
             Log.d("ProgressBar", "values: " + "Budget: " + budget + " Alert: " + alert + " Total: " + totalSpend);
             item.put("progressBar", values);
 
-            itemTrips.add(item);
+            itemVoyage.add(item);
             cursor.moveToNext();
 
         }
 
         cursor.close();
-        return itemTrips;
+        return itemVoyage;
     }
+
+    // Used to get the ID from trip according to destiny
+    public int returnSelectedVoyageId(String destiny){
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String sql = "SELECT _id FROM voyage WHERE destiny=?";
+        Cursor cursorID = db.rawQuery(sql, new String[]{destiny.toString()});
+        cursorID.moveToFirst();
+
+        int result = cursorID.getInt(0);
+        Log.d("Actual Id", "ID: " + result);
+        return result;
+    }
+
 
     private double calcTotalSpend(SQLiteDatabase db, String id) {
         Cursor cursor = db.rawQuery("SELECT SUM(value) FROM SPENDING WHERE VOYAGE_ID = ?", new String[]{id});
@@ -174,17 +204,94 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
         return total;
     }
 
+    //*************************** ALERTS ********************************
+    private AlertDialog buildAlertDialog() {
+        final CharSequence[] items = {
+                "Register new spending",
+                "Show my spendings",
+                "Remove"};
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Options");
+        builder.setItems(items, this);
+        return builder.create();
+    }
+
+    // AlertDialog to confirm the remove..
+    private AlertDialog buildDialogConfirmation() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are You sure you want to remove?");
+        builder.setPositiveButton("Yes", this);
+        builder.setNegativeButton("No", this);
+        return builder.create();
+    }
+
+    //*************************** ALERTS ********************************
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
+    public void onClick(DialogInterface dialog, int item) {
         Log.d("Options Dialog", "I am Here in OPTIONS ");
+
+        switch(item){
+
+            case 0: //New Spendings
+                Toast.makeText(getApplicationContext(), "Go to Spending Fragment..", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case 1: //Show my Spendings
+                Toast.makeText(getApplicationContext(), "Show my Spendings..", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case 2: //Remove
+                dialogConfirmation.show();
+                break;
+
+            case DialogInterface.BUTTON_POSITIVE:
+                itemVoyage.remove(selectedVoyage);
+                SQLiteDatabase db = helper.getReadableDatabase();
+                db.delete("voyage", "_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
+                db.delete("spending", "voyage_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
+                getListView().invalidateViews();
+
+                Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+                break;
+
+            case DialogInterface.BUTTON_NEGATIVE:
+                dialogConfirmation.dismiss();
+                break;
+
+        }
+
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplication(), "Item: " + position, Toast.LENGTH_SHORT).show();
+
+        this.selectedVoyage = position;
+        alertDialog.show();
+
+        Map<String, Object> map = itemVoyage.get(position);
+        String destiny = (String) map.get("destiny");
+
+        setSelectedTripDestination(destiny);
+        setSelectedDestinationId(returnSelectedVoyageId(destiny));  //get the selected voyage id
+
+        setSelectItemID(id + 1);
+        Log.d("SelectedTripID", "Destination: " + getSelectedTripDestination() + " ID: " + returnSelectedVoyageId(destiny) + " ItemId: " + getSelectItemID());
+
+        //Toast.makeText(getApplication(), "Item: " + position, Toast.LENGTH_SHORT).show();
+
+
     }
+
+
 
     @Override
     public boolean setViewValue(View view, Object data, String textRepresentation) {
@@ -216,5 +323,29 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
     public void setAlertLimit(double alertLimit) {
         this.alertLimit = alertLimit;
+    }
+
+    public String getSelectedTripDestination() {
+        return selectedTripDestination;
+    }
+
+    public void setSelectedTripDestination(String selectedTripDestination) {
+        this.selectedTripDestination = selectedTripDestination;
+    }
+
+    public int getSelectedDestinationId() {
+        return selectedDestinationId;
+    }
+
+    public void setSelectedDestinationId(int selectedDestinationId) {
+        this.selectedDestinationId = selectedDestinationId;
+    }
+
+    public long getSelectItemID() {
+        return selectItemID;
+    }
+
+    public void setSelectItemID(long selectItemID) {
+        this.selectItemID = selectItemID;
     }
 }
