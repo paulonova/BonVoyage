@@ -1,4 +1,4 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.preferences;
 
 
 import android.annotation.TargetApi;
@@ -15,13 +15,14 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import java.util.List;
+
+import se.paulo.nackademin.examen.bonvoyage.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

@@ -1,4 +1,4 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.preferences;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

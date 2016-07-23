@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bonvoyage.adapters.VoyageListAdapter;
 import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.Voyage;
 
@@ -50,6 +51,10 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
     SpendingFragment spendingFragment = null;
 
+    Map<String, Object> map;
+
+    VoyageListAdapter voyageListAdapter;
+
     private int selectedVoyage;
     private List<Map<String, Object>> itemVoyage;
 
@@ -68,11 +73,6 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voyage_list);
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        //Connecting to MenuVoyageActivity!
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageButton = (ImageButton)findViewById(R.id.img_menu_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +103,10 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
         int[] to = {R.id.img_type_voyage, R.id.txtPlaceYouGo, R.id.txtDateYouGo, R.id.txtBudgetYouHave, R.id.progressBar};
 
         listView = (ListView)findViewById(android.R.id.list);
+
+//        voyageListAdapter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
+//        voyageListAdapter.setViewBinder(this);
+//        setListAdapter(voyageListAdapter);
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
         simpleAdapter.setViewBinder(this);
@@ -254,12 +258,13 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
                 SQLiteDatabase db = helper.getReadableDatabase();
                 db.delete("voyage", "_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
                 db.delete("spending", "voyage_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
-                getListView().invalidateViews();
 
-                Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                voyageListAdapter.remove(1);
+                voyageListAdapter.notifyDataSetChanged();
+                getListView().setAdapter(voyageListAdapter);
 
+                finish();
+                startActivity(getIntent());  //to restart the activity
                 break;
 
             case DialogInterface.BUTTON_NEGATIVE:
@@ -274,10 +279,11 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        selectedDestinationId = 0;
         this.selectedVoyage = position;
         alertDialog.show();
 
-        Map<String, Object> map = itemVoyage.get(position);
+        map = itemVoyage.get(position);
         String destiny = (String) map.get("destiny");
 
         setSelectedTripDestination(destiny);
@@ -290,6 +296,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
 
     }
+
 
 
 

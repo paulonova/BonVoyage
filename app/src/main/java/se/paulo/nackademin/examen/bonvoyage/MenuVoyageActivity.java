@@ -32,6 +32,7 @@ import java.util.Calendar;
 import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
+import bonvoyage.preferences.SettingsActivity;
 
 public class MenuVoyageActivity extends AppCompatActivity
                                 implements NavigationView.OnNavigationItemSelectedListener {
@@ -203,10 +204,6 @@ public class MenuVoyageActivity extends AppCompatActivity
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);
 
-//                voyageListFragment = new VoyageListFragment();
-//                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, voyageListFragment);
-//                fragmentVoyageTransaction.commit();
                 break;
 
             case R.id.settings:

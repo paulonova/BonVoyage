@@ -97,7 +97,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     public Voyage getVoyageInfo(int userId){
 
         Voyage voyage = null;

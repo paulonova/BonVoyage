@@ -41,7 +41,7 @@
             android:name=".RegisterActivity"
             android:label="@string/register" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="bonvoyage.preferences.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MenuVoyageActivity">
             <meta-data

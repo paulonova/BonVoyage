@@ -3,18 +3,18 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="se.paulo.nackademin.examen.bonvoyage.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="bonvoyage.preferences.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_green_24dp"
         android:title="@string/pref_header_limit_spending_values" />
 
 
     <header
-        android:fragment="se.paulo.nackademin.examen.bonvoyage.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="bonvoyage.preferences.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_green_24dp"
         android:title="@string/pref_header_set_login" />
 
     <header
-        android:fragment="se.paulo.nackademin.examen.bonvoyage.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="bonvoyage.preferences.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_green_24dp"
         android:title="@string/pref_header_data_sync" />
 
