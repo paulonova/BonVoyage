@@ -1,4 +1,4 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.fragments;
 
 
 import android.app.AlertDialog;
@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import se.paulo.nackademin.examen.bonvoyage.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,10 +31,12 @@ public class SpendingFragment extends Fragment {
         // Required empty public constructor
     }
 
-    Spinner spinner;
+    public Spinner spinner;
     List<String> categoryList;
-    EditText value, description, place;
-    Button saveSpending, dateSpending;
+    public EditText value;
+    public EditText description;
+    public EditText place;
+    public Button saveSpending, dateSpending;
 
     private int actualYear, actualMonth, actualDay;
     private int selectedYear, selectedMonth, selectedDay;
@@ -42,8 +46,8 @@ public class SpendingFragment extends Fragment {
     //private AlertDialog alert;
 
 
-    Calendar spendCalendar = Calendar.getInstance();
-    DatePickerDialog.OnDateSetListener dSpend = new DatePickerDialog.OnDateSetListener() {
+    public Calendar spendCalendar = Calendar.getInstance();
+    public DatePickerDialog.OnDateSetListener dSpend = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             spendCalendar.set(Calendar.YEAR, year);

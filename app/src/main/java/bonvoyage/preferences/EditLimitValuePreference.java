@@ -1,4 +1,4 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,6 +6,8 @@ import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.widget.EditText;
+
+import se.paulo.nackademin.examen.bonvoyage.R;
 
 
 public class EditLimitValuePreference extends DialogPreference {

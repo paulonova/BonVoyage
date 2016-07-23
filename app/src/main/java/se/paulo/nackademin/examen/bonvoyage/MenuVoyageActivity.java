@@ -30,6 +30,9 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import bonvoyage.database.DatabaseHelper;
+import bonvoyage.fragments.FirstAppInfoFragment;
+import bonvoyage.fragments.NewVoyageFragment;
+import bonvoyage.fragments.SpendingFragment;
 import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 import bonvoyage.preferences.SettingsActivity;
@@ -47,7 +50,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     VoyageListActivity voyageListActivity;
 
     //All Fragments..
-    NewVoyageFragment voyageFragment = null;
+    NewVoyageFragment voyageFragment;
     SpendingFragment spendingFragment = null;
 
     private DatabaseHelper helper;

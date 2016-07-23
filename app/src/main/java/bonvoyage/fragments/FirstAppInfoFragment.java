@@ -1,4 +1,4 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.fragments;
 
 
 import android.app.Activity;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+
+import se.paulo.nackademin.examen.bonvoyage.R;
 
 
 /**

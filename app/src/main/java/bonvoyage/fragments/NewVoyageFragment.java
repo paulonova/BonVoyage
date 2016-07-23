@@ -1,31 +1,22 @@
-package se.paulo.nackademin.examen.bonvoyage;
+package bonvoyage.fragments;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
 import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.Voyage;
+import se.paulo.nackademin.examen.bonvoyage.R;
 
 
 /**
@@ -38,17 +29,20 @@ public class NewVoyageFragment extends Fragment {
     private int month;
     private int day;
 
-    Button arrivalBtn;
-    Button exitBtn;
+    public Button arrivalBtn;
+    public Button exitBtn;
     private Button saveBtn;
 
-    RadioGroup typeTrip, radioGroup;
+    RadioGroup typeTrip;
+    public RadioGroup radioGroup;
     private String typeTripText;
 
     //Database saving..
     private DatabaseHelper helper;
 
-    EditText destination, budget, numberPerson;
+    public EditText destination;
+    public EditText budget;
+    public EditText numberPerson;
     private Voyage voyage;
 
     private int id_Actual;
@@ -63,10 +57,10 @@ public class NewVoyageFragment extends Fragment {
     }
 
     //Calendar
-    Calendar arrivalCalendar = Calendar.getInstance();
-    Calendar exitCalendar = Calendar.getInstance();
+    public Calendar arrivalCalendar = Calendar.getInstance();
+    public Calendar exitCalendar = Calendar.getInstance();
 
-    DatePickerDialog.OnDateSetListener dArrival = new DatePickerDialog.OnDateSetListener() {
+    public DatePickerDialog.OnDateSetListener dArrival = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             arrivalCalendar.set(Calendar.YEAR, year);
@@ -78,7 +72,7 @@ public class NewVoyageFragment extends Fragment {
     };
 
 
-    DatePickerDialog.OnDateSetListener dExit = new DatePickerDialog.OnDateSetListener() {
+    public DatePickerDialog.OnDateSetListener dExit = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             exitCalendar.set(Calendar.YEAR, year);

@@ -1,8 +1,6 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,9 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +27,7 @@ import java.util.Map;
 
 import bonvoyage.adapters.VoyageListAdapter;
 import bonvoyage.database.DatabaseHelper;
+import bonvoyage.fragments.SpendingFragment;
 import bonvoyage.objects.Voyage;
 
 public class VoyageListActivity extends ListActivity implements AdapterView.OnItemClickListener,
