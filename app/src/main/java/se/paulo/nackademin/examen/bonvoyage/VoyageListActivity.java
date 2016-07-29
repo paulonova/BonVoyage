@@ -75,6 +75,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 Intent intentVoyage = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+                intentVoyage.putExtra("from_voyage_list", "yes"); // to identify where it comes..
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);
                 finish();
@@ -100,7 +101,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         listView = (ListView)findViewById(android.R.id.list);
 
-//        voyageListAdapter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
+//        voyageListAda pter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
 //        voyageListAdapter.setViewBinder(this);
 //        setListAdapter(voyageListAdapter);
 
@@ -255,12 +256,14 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
                 db.delete("voyage", "_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
                 db.delete("spending", "voyage_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
 
-                voyageListAdapter.remove(1);
-                voyageListAdapter.notifyDataSetChanged();
-                getListView().setAdapter(voyageListAdapter);
 
-                finish();
-                startActivity(getIntent());  //to restart the activity
+                /*TODO: I need to make the remove item better without start activity */
+//                Log.d("SELECTED ItemID", "" + (getSelectItemID()-1));
+//                voyageListAdapter.remove(getSelectItemID() - 1);
+//                voyageListAdapter.notifyDataSetChanged();
+//                getListView().setAdapter(voyageListAdapter);
+
+                startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));  //to restart the activity without finish()
                 break;
 
             case DialogInterface.BUTTON_NEGATIVE:

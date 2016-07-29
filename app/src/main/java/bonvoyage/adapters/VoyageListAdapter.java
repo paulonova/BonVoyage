@@ -72,7 +72,7 @@ public class VoyageListAdapter extends SimpleAdapter{
             myViewHolder.budgetYouHave = (TextView)itemView.findViewById(R.id.txtBudgetYouHave);
 
             myViewHolder.progressBar = (ProgressBar)itemView.findViewById(R.id.progressBar);
-            itemView.setTag(myViewHolder);
+            //itemView.setTag(myViewHolder);
 
         }else {
             itemView = convertView;
@@ -85,8 +85,8 @@ public class VoyageListAdapter extends SimpleAdapter{
 
 
 
-    public void remove(int position) {
-        if (position >= 0 && data.size() < position && data.get(position) != null) {
+    public void remove(long position) {
+        if (position >= 0 && data.size() < position && data.get((int) position) != null) {
             data.remove(position);
         }
     }

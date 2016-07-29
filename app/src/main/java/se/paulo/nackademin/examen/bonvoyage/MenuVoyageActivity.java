@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,11 +48,14 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     public static final String SPENDING_PREFERENCE = "spending_info";
     public static final String VOYAGE_PREFERENCE = "voyage_info";
-    VoyageListActivity voyageListActivity;
+
+    Bundle bundle;
 
     //All Fragments..
-    NewVoyageFragment voyageFragment;
+    NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
+    VoyageListActivity voyageListActivity = null;
+
 
     private DatabaseHelper helper;
 
@@ -87,6 +91,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                                                                 R.string.navigation_drawer_open,
                                                                 R.string.navigation_drawer_close);
+
         assert drawer != null;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -116,6 +121,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         Log.i("USER ID","" + currentUserId);
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -202,7 +208,6 @@ public class MenuVoyageActivity extends AppCompatActivity
                 break;
 
             case R.id.show_voyages:
-
                 Intent intentVoyage = new Intent(this, VoyageListActivity.class);
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);
@@ -212,10 +217,6 @@ public class MenuVoyageActivity extends AppCompatActivity
             case R.id.settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
-
-                break;
-
-            case R.id.nav_share:
 
                 break;
 

@@ -173,6 +173,11 @@
     <string name="no_trip_msg">There is no Voyage registered in database, please create a Voyage first..</string>
     <string name="voyage_list">Voyage list</string>
     <string name="img_button">Image Button</string>
+    <string name="limit_value">Limit value</string>
+    <string name="set_limits">Set Spend Limits</string>
+    <string name="set_value_limit">Set Limit Value %</string>
+    <string name="value_limit_summary">Notify when the spendings are going over the limit</string>
+    <string name="value_limit">Limit Value</string>
 
 
 </resources>

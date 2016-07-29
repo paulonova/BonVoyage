@@ -23,10 +23,6 @@
     <item android:title="@string/comunicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/share" />
-            <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/information"
                 android:title="@string/info" />

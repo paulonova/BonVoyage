@@ -11,8 +11,8 @@ public class Voyage {
     public static final String EXIT_DATE = "exit_date";
     public static final String BUDGET = "budget";
     public static final String NUMBER_PEOPLES = "number_peoples";
-    public static final String TYPE_TRIP = "type_trip";
-    public static final String[] COLUMNS = new String[]{_ID, USER_ID, DESTINY, ARRIVAL_DATE, EXIT_DATE, TYPE_TRIP, BUDGET, NUMBER_PEOPLES};
+    public static final String TYPE_VOYAGE = "type_voyage";
+    public static final String[] COLUMNS = new String[]{_ID, USER_ID, DESTINY, ARRIVAL_DATE, EXIT_DATE, TYPE_VOYAGE, BUDGET, NUMBER_PEOPLES};
 
 
     private Integer id;
@@ -38,6 +38,17 @@ public class Voyage {
         this.budget = budget;
         this.numberPeoples = numberPeoples;
         this.actualVoyage = actualVoyage;
+    }
+
+    public Voyage(Integer id, Integer user_id, String destiny, String typeVoyage, String arrivalDate, String exitDate, Double budget, Integer numberPeoples) {
+        this.id = id;
+        this.user_id = user_id;
+        this.destiny = destiny;
+        this.typeVoyage = typeVoyage;
+        this.arrivalDate = arrivalDate;
+        this.exitDate = exitDate;
+        this.budget = budget;
+        this.numberPeoples = numberPeoples;
     }
 
     //Empty Constructor

@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/set_limits"/>
+
+
+    <bonvoyage.preferences.EditLimitValuePreference
+        android:id="@+id/limit_value"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:dialogTitle="@string/set_value_limit"
+        android:key="value_limit"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:imeOptions="actionNext"
+        android:defaultValue="80"
+        android:summary="@string/value_limit_summary"
+        android:title="@string/value_limit"
+        android:inputType="number">
+
+    </bonvoyage.preferences.EditLimitValuePreference>
+
+</PreferenceScreen>

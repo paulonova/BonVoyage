@@ -10,6 +10,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:imeOptions="actionNext"
+        android:hint="@string/limit_value"
         android:inputType="number"/>
 
 </LinearLayout>
