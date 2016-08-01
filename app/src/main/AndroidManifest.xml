@@ -57,6 +57,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.paulo.nackademin.examen.bonvoyage.MenuVoyageActivity" />
         </activity>
+
+        <activity
+            android:name=".SpendListActivity"
+            android:label="@string/title_activity_spend_list"
+            android:parentActivityName=".MenuVoyageActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="se.paulo.nackademin.examen.bonvoyage.MenuVoyageActivity" />
+        </activity>
     </application>
 
 </manifest>

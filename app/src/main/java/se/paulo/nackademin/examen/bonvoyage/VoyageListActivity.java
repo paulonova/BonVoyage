@@ -92,8 +92,12 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         // Instantiate SharedPreferences and retrieve the limit value of the budget..
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String value = preferences.getString("value_limit", "50"); // 0 to 100%
+        String value = preferences.getString("value_limit", "80"); // 0 to 100%
         Log.d("Limit Value Saved", "The Value is: " + value);
+
+        /**TODO: Need to implement the Limit Spend Value Alert
+         * HERE ! *********************************************/
+
         limitValue = Double.valueOf(value);
 
         String[] from = {"image", "destiny", "date", "total", "progressBar"};
@@ -101,7 +105,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         listView = (ListView)findViewById(android.R.id.list);
 
-//        voyageListAda pter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
+//        voyageListAdapter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
 //        voyageListAdapter.setViewBinder(this);
 //        setListAdapter(voyageListAdapter);
 
@@ -156,9 +160,9 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
             Map<String, Object> item = new HashMap<String, Object>();
 
             if (typeVoyage.contains(TRIP_VACATIONS)) {
-                item.put("image", R.drawable.vacation_photo);
+                item.put("image", R.drawable.photo_vacation);
             } else {
-                item.put("image", R.drawable.business_man_photo);
+                item.put("image", R.drawable.photo_business);
             }
 
             item.put("id", id);
@@ -242,7 +246,11 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
                 break;
 
             case 1: //Show my Spendings
-                Toast.makeText(getApplicationContext(), "Show my Spendings..", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(),SpendListActivity.class );
+                intent.putExtra("DestinationID", getSelectedDestinationId());  // Sending the selected trip..
+                intent.putExtra("ItemId", getSelectItemID());
+                startActivity(intent);
+                finish();
 
                 break;
 

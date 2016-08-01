@@ -8,7 +8,7 @@
             android:title="@string/newRegister" />
         <item
             android:id="@+id/new_spending"
-            android:icon="@drawable/ic_spend_24dp"
+            android:icon="@drawable/ic_spend_24dp_black"
             android:title="@string/newSpending" />
         <item
             android:id="@+id/show_voyages"

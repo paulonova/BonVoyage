@@ -1,55 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="185dp">
 
     <ImageView
         android:id="@+id/img_type_voyage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/vacation_photo"/>
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/photo_vacation"
+        android:scaleType="centerCrop" />
 
-    <LinearLayout
-        android:layout_toEndOf="@id/img_type_voyage"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="5dp"
-        android:id="@+id/linearLayout">
+        android:layout_alignBottom="@+id/img_type_voyage"
+        android:background="@drawable/custom_event_row_info_background">
 
-        <TextView
-            android:id="@+id/txtPlaceYouGo"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/place_you_go"
-            android:textStyle="bold"/>
+            android:layout_margin="10dp">
 
-        <TextView
-            android:id="@+id/txtDateYouGo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/date_you_go"
-            android:textStyle="italic"/>
+            <ImageView
+                android:id="@+id/imgViewLocation"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_location_24dp"
+                android:layout_marginBottom="3dp"/>
 
-        <TextView
-            android:id="@+id/txtBudgetYouHave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/budget_you_have"/>
+            <TextView
+                android:id="@+id/txtPlaceYouGo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/imgViewLocation"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white"
+                android:text="@string/place_you_go"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_marginTop="5dp"
-            style="@android:style/Widget.ProgressBar.Horizontal"/>
+            <ImageView
+                android:id="@+id/imgViewTime"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_below="@id/txtPlaceYouGo"
+                android:layout_marginBottom="3dp"
+                android:src="@drawable/ic_time_24dp"/>
+
+            <TextView
+                android:id="@+id/txtDateYouGo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtPlaceYouGo"
+                android:layout_toRightOf="@+id/imgViewTime"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp"
+                android:text="@string/date_you_go"
+                android:textStyle="italic"/>
+
+            <ImageView
+                android:id="@+id/imgViewBudget"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="2dp"
+                android:layout_below="@id/imgViewTime"
+                android:src="@drawable/ic_spend_24dp_white"/>
+
+            <TextView
+                android:id="@+id/txtBudgetYouHave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtDateYouGo"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/imgViewBudget"
+                android:layout_marginLeft="5dp"
+                android:text="@string/budget_you_have"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/txtBudgetYouHave"
+                style="@android:style/Widget.ProgressBar.Horizontal"/>
+
+
+        </RelativeLayout>
 
 
 
-    </LinearLayout>
 
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"
+        android:background="@color/colorPrimaryDark"/>
 
 
 </RelativeLayout>

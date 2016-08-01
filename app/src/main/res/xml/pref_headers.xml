@@ -4,7 +4,7 @@
 
     <header
         android:fragment="bonvoyage.preferences.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_spend_limit_24dp"
+        android:icon="@drawable/ic_spend_limit_24dp_green"
         android:title="@string/pref_header_limit_spending_values" />
 
 
