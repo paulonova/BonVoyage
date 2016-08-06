@@ -1,13 +1,15 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,12 +23,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bonvoyage.adapters.SpendingListAdapter;
 import bonvoyage.database.DatabaseHelper;
+import bonvoyage.objects.Spending;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Paulo Vila Nova on 2016-07-29.
  */
-public class SpendListActivity extends ListActivity implements AdapterView.OnItemClickListener  {
+public class SpendListActivity extends AppCompatActivity implements SpendingListAdapter.ItemClickCallBack  {
 
     private DatabaseHelper helper;
     private SimpleDateFormat dateFormat;
@@ -35,6 +41,12 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
 
     private String selectedDescription;
     private int selectedIdSpend;
+    @Bind(R.id.spendToolbar) Toolbar toolbar;
+
+    private RecyclerView recView;
+    private SpendingListAdapter adapter;
+
+    Spending spending;
 
 
 
@@ -45,21 +57,41 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.spend_list);
+        setContentView(R.layout.spend_list);
+
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                finish();
+            }
+        });
 
         helper = new DatabaseHelper(this);
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-        String[] from = {"date", "description", "value", "category"};
-        int[] to = {R.id.spend_date, R.id.spend_description, R.id.spend_value, R.id.linearLayoutSpendCategory};
+//        String[] from = {"date", "description", "value", "category"};
+//        int[] to = {R.id.spend_date, R.id.spend_description, R.id.spend_value, R.id.linearLayoutSpendCategory};
+//
+//        SimpleAdapter adapter = new SimpleAdapter(this, spendList(), R.layout.spend_list, from, to);
+//        adapter.setViewBinder(new SpendViewBinder()); // class SpendViewBinder
+//        setListAdapter(adapter);
+//        getListView().setOnItemClickListener(this);
 
-        SimpleAdapter adapter = new SimpleAdapter(this, spendList(), R.layout.spend_list, from, to);
-        adapter.setViewBinder(new SpendViewBinder()); // class SpendViewBinder
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
+        recView = (RecyclerView)findViewById(R.id.spending_fragment_list);
+        //LayoutManager: GridLayoutManager and StaggeredGridLayoutManager
+        recView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new SpendingListAdapter(spendList(), this);
+        recView.setAdapter(adapter);
+        adapter.setItemClickCallBack(this);
 
         // register the new context menu..
-        registerForContextMenu(getListView());
+        registerForContextMenu(recView);
 
         retrieveActualTripID();
 
@@ -79,70 +111,66 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
-    private List<Map<String, Object>> spendList() {
+
+    private List<Spending> spendList() {
+
+        List<Spending> data = new ArrayList<>();
 
         SQLiteDatabase db = helper.getReadableDatabase();
         String sql1 = "SELECT _id, date, description, value, category, voyage_id FROM spending WHERE voyage_id=?";
         Cursor cursor = db.rawQuery(sql1, new String[]{Long.toString(retrieveActualTripID())});
         cursor.moveToFirst();
 
-        spend = new ArrayList<Map<String, Object>>();
+        //spend = new ArrayList<Map<String, Object>>();
 
         Log.d("SpendListActivity", "Passing here..");
+
+        if(cursor.getCount()== 0){
+            //Start en AlertDialog...
+        }
 
 
         for (int i = 0; i < cursor.getCount(); i++) {
 
-            Log.d("SpendListActivity", "Passing here too..");
-            int id = cursor.getInt(0);
-            String date = cursor.getString(1);
-            Log.d("Date", "date: " + date);
-            String description = cursor.getString(2);
-            double value = cursor.getDouble(3);
-            String category = cursor.getString(4);
-            int tripId = cursor.getInt(5);
+            spending = new Spending();
 
-            Log.d("Database Info", "BudgetTable: " + " id: "+ id + " - " + date + " - " + description + " - " + value + " - " + category + " - " + tripId);
+            spending.setId(cursor.getInt(0));
+            spending.setDate(cursor.getString(1));
+            spending.setDescription(cursor.getString(2));
+            spending.setValue(cursor.getDouble(3));
+            spending.setCategory(cursor.getString(4));
+            spending.setVoyageId(cursor.getInt(5));
 
-            Map<String, Object> item = new HashMap<String, Object>();
-            item.put("date", date);
-            item.put("description", description);
-            item.put("value", getString(R.string.money) + " " + value);
 
-            if (category.equalsIgnoreCase("fuel")) {
-                item.put("category", R.color.category_fuel);
-            } else if (category.equalsIgnoreCase("food")) {
-                item.put("category", R.color.category_feeding);
-            } else if (category.equalsIgnoreCase("transportation")) {
-                item.put("category", R.color.category_transport);
-            } else if (category.equalsIgnoreCase("accommodation")) {
-                item.put("category", R.color.category_accommodation);
-            } else if (category.equalsIgnoreCase("others")) {
-                item.put("category", R.color.category_others);
-            }
+            Log.d("Database Info", "BudgetTable: " + " id: "+ spending.getId() + " - " + spending.getDate() + " - " + spending.getDescription()
+                    + " - " + spending.getValue() + " - " + spending.getDescription() + " - " + spending.getVoyageId());
 
-            spend.add(item);
+
+
+            data.add(spending);
             cursor.moveToNext();
         }
 
-        return spend;
+        cursor.close();
+        return data;
     }
 
 
-
+//Interfaces created in SpendingListAdapter to make the viewItem clickable..
+    @Override
+    public void onItemClick(int position) {
+        spending = spendList().get(position);
+        setSelectedDescription(spending.getDescription());
+        alertBeforeClose();
+    }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Map<String, Object> map = spend.get(position);
-        setSelectedDescription((String) map.get("description"));
-        alertBeforeClose();
-        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void onStarIconClick(int p) {
 
     }
 
-    /**
-     * Method to use when onBackPressed() is used.
-     */
+
+
     public void alertBeforeClose() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -158,18 +186,16 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
 
                 if (result != -1) {
                     Toast.makeText(getApplicationContext(), "Spend Removed..", Toast.LENGTH_SHORT).show();
-                    getListView().invalidateViews();
-                    spend.remove(getListView());
-                    finish();
+                    //getListView().invalidateViews();
+                    recView.invalidate();
+                    spendList().remove(recView);
 
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Spend NOT Removed..", Toast.LENGTH_SHORT).show();
                 }
 
-                Intent intent = new Intent(getApplicationContext(), VoyageListActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                startActivity(intent);
+                startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));  //to restart the activity without finish()
             }
         });
 
@@ -191,6 +217,8 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
         finish();
     }
 
+
+
     private class SpendViewBinder implements SimpleAdapter.ViewBinder {
 
 
@@ -199,7 +227,7 @@ public class SpendListActivity extends ListActivity implements AdapterView.OnIte
 
             Log.d("TEst Spend","View :" + view + " data: " + data + " textRepresentation: " + textRepresentation);
 
-            if (view.getId() == R.id.spend_date) {
+            if (view.getId() == R.id.spendDate) {
                 if (!dateBefore.equals(data)) {
                     TextView textView = (TextView) view;
                     textView.setText(textRepresentation);

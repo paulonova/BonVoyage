@@ -1,6 +1,8 @@
 package bonvoyage.objects;
 
 
+import android.widget.ProgressBar;
+
 public class Voyage {
 
     public static final String TABLE = "voyage";
@@ -24,10 +26,13 @@ public class Voyage {
     private Double budget;
     private Integer numberPeoples;
     private Integer actualVoyage;
+    private Double[] progressBar;
+    private double totalSpend;
+    private double alertSpend;
 
-    //Constructor
 
 
+    //Constructors
     public Voyage(Integer id, Integer user_id, String destiny, String typeVoyage, String arrivalDate, String exitDate, Double budget, Integer numberPeoples, Integer actualVoyage) {
         this.id = id;
         this.user_id = user_id;
@@ -54,6 +59,33 @@ public class Voyage {
     //Empty Constructor
     public Voyage() {
     }
+
+    //GETTERS AND SETTERS
+
+    public double getAlertSpend() {
+        return alertSpend;
+    }
+
+    public void setAlertSpend(double alertSpend) {
+        this.alertSpend = alertSpend;
+    }
+
+    public double getTotalSpend() {
+        return totalSpend;
+    }
+
+    public void setTotalSpend(double totalSpend) {
+        this.totalSpend = totalSpend;
+    }
+
+    public Double[] getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(Double[] progressBar) {
+        this.progressBar = progressBar;
+    }
+
 
     public Integer getId() {
         return id;

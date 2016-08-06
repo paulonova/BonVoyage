@@ -184,6 +184,9 @@
     <string name="money">$</string>
     <string name="delete_spendings">Spending will be deleted! Are you sure?</string>
     <string name="title_activity_spend_list">Spend List</string>
+    <string name="type_voyage">Voyage type</string>
+    <string name="total_spend">Total Spend:</string>
+    <string name="spending_list">Spending List</string>
 
 
 </resources>

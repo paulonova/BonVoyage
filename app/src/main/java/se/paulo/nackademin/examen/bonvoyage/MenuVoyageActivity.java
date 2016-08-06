@@ -55,6 +55,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
     VoyageListActivity voyageListActivity = null;
+    //ListVoyageFragment listVoyageFragment = null;
 
 
     private DatabaseHelper helper;
@@ -208,6 +209,13 @@ public class MenuVoyageActivity extends AppCompatActivity
                 break;
 
             case R.id.show_voyages:
+
+//                listVoyageFragment = new ListVoyageFragment();
+//                android.support.v4.app.FragmentTransaction fragmentVoyageTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentVoyageTransaction.replace(R.id.fragment_menu_container, listVoyageFragment);
+//                fragmentVoyageTransaction.commit();
+
+
                 Intent intentVoyage = new Intent(this, VoyageListActivity.class);
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);

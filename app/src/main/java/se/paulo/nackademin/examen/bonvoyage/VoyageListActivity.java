@@ -10,6 +10,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,8 +33,9 @@ import bonvoyage.database.DatabaseHelper;
 import bonvoyage.fragments.SpendingFragment;
 import bonvoyage.objects.Voyage;
 
-public class VoyageListActivity extends ListActivity implements AdapterView.OnItemClickListener,
-                                                                DialogInterface.OnClickListener, SimpleAdapter.ViewBinder{
+//ListActivity
+public class VoyageListActivity extends AppCompatActivity implements VoyageListAdapter.ItemClickCallBack,
+                                                                DialogInterface.OnClickListener{
 
     private DatabaseHelper helper;
     private SimpleDateFormat dateFormat;
@@ -46,21 +50,22 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
     private int selectedDestinationId;
 
     SpendingFragment spendingFragment = null;
-
-    Map<String, Object> map;
-
-    VoyageListAdapter voyageListAdapter;
+    Voyage voyage;
 
     private int selectedVoyage;
-    private List<Map<String, Object>> itemVoyage;
+//    private List<Map<String, Object>> itemVoyage;
+//    Map<String, Object> map;
 
     private double totalSpend;
     private double alertLimit;
-    ListView listView;
+
     SharedPreferences myPreferences;
     int currentUserId;
 
     ImageButton imageButton;
+
+    private RecyclerView recView;
+    private VoyageListAdapter adapter;
 
     public static final String TRIP_VACATIONS = "Vacation";
     public static final String TRIP_BUSINESS = "Business";
@@ -75,7 +80,6 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
                 Intent intentVoyage = new Intent(getApplicationContext(), MenuVoyageActivity.class);
-                intentVoyage.putExtra("from_voyage_list", "yes"); // to identify where it comes..
                 intentVoyage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentVoyage);
                 finish();
@@ -100,37 +104,29 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         limitValue = Double.valueOf(value);
 
-        String[] from = {"image", "destiny", "date", "total", "progressBar"};
-        int[] to = {R.id.img_type_voyage, R.id.txtPlaceYouGo, R.id.txtDateYouGo, R.id.txtBudgetYouHave, R.id.progressBar};
+        /*Implementing of RecyclerView*/
 
-        listView = (ListView)findViewById(android.R.id.list);
+        recView = (RecyclerView)findViewById(R.id.voyage_fragment_list);
+        //LayoutManager: GridLayoutManager and StaggeredGridLayoutManager
+        recView.setLayoutManager(new LinearLayoutManager(this));
 
-//        voyageListAdapter = new VoyageListAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
-//        voyageListAdapter.setViewBinder(this);
-//        setListAdapter(voyageListAdapter);
-
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listVoyage(), R.layout.voyage_list_modell, from, to);
-        simpleAdapter.setViewBinder(this);
-        setListAdapter(simpleAdapter);
-
-
-        Log.i("LIST-VOYAGE","" + listVoyage().toString());
-        getListView().setOnItemClickListener(this);
+        adapter = new VoyageListAdapter(listVoyage(), this);
+        recView.setAdapter(adapter);
+        adapter.setItemClickCallBack(this);
 
         this.alertDialog = buildAlertDialog();
         this.dialogConfirmation = buildDialogConfirmation();
 
     }
 
+    public  List<Voyage> listVoyage() {
 
-    private List<Map<String, Object>> listVoyage() {
+        List<Voyage> data = new ArrayList<>();
 
         SQLiteDatabase db = helper.getReadableDatabase();
         String sql = "SELECT _id, type_voyage, destiny, arrive_date, exit_date, budget, number_peoples, user_id FROM voyage WHERE user_id=" + currentUserId;
         Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
-        itemVoyage = new ArrayList<Map<String, Object>>();
-        Voyage voyage;
 
 
         if(cursor.getCount()== 0){
@@ -139,52 +135,37 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
         for (int i = 0; i < cursor.getCount(); i++) {
 
-            // Getting values from DB..
-            int id = cursor.getInt(0);
-            String typeVoyage = cursor.getString(1);
-            String destiny = cursor.getString(2);
-            String arrivalDate = cursor.getString(3);
-            String exitDate = cursor.getString(4);
-            double budget = cursor.getDouble(5);
-            int numberPeoples = cursor.getInt(6);
-            int userId = cursor.getInt(7);
+            voyage = new Voyage();
 
-            double alert = budget * limitValue / 100;
-            double totalSpend = calcTotalSpend(db, id + "");
-            setTotalSpend(totalSpend);
+            //Saving direct into the Voyage
+            voyage.setId(cursor.getInt(0));
+            voyage.setTypeVoyage(cursor.getString(1));
+            voyage.setDestiny(cursor.getString(2));
+            voyage.setArrivalDate(cursor.getString(3));
+            voyage.setExitDate(cursor.getString(4));
+            voyage.setBudget(cursor.getDouble(5));
+            voyage.setNumberPeoples(cursor.getInt(6));
+            voyage.setUser_id(cursor.getInt(7));
 
-            Log.i("Database Info TRIP", "Info: " + "ID: " + id + " - " + "TypeVoyage: " + typeVoyage + " - " +
-                    "Destiny: " + destiny + " - " + "ArrivalDate: " + arrivalDate + " - " +
-                    "ExitDate: " + exitDate + " - " + "Budget: " + budget + " - Number of people: " + numberPeoples);
 
-            Map<String, Object> item = new HashMap<String, Object>();
 
-            if (typeVoyage.contains(TRIP_VACATIONS)) {
-                item.put("image", R.drawable.photo_vacation);
-            } else {
-                item.put("image", R.drawable.photo_business);
-            }
+            //double alert = voyage.getBudget() * limitValue / 100;
+            voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);
+            voyage.setTotalSpend(calcTotalSpend(db, voyage.getId() + ""));
 
-            item.put("id", id);
-            item.put("destiny", destiny);
-            item.put("date", arrivalDate + " to " + exitDate);
+            Log.i("Database Info TRIP", "Info: " + "ID: " + voyage.getId() + " - " + "TypeVoyage: " + voyage.getTypeVoyage() + " - " +
+                    "Destiny: " + voyage.getDestiny() + " - " + "ArrivalDate: " + voyage.getArrivalDate() + " - " +
+                    "ExitDate: " + voyage.getExitDate() + " - " + "Budget: " + voyage.getBudget() + " - Number of people: " + voyage.getNumberPeoples());
 
-            item.put("total", "Total Spend: " + totalSpend + "    Budget: " + budget);
-            Log.d("TOTAL_SPEND", "TOTAL: " + totalSpend);
-
-            Double[] values = new Double[]{budget, alert, totalSpend};
-
-            Log.d("ProgressBar", "values: " + "Budget: " + budget + " Alert: " + alert + " Total: " + totalSpend);
-            item.put("progressBar", values);
-
-            itemVoyage.add(item);
+            data.add(voyage);
             cursor.moveToNext();
 
         }
 
         cursor.close();
-        return itemVoyage;
+        return data;
     }
+
 
     // Used to get the ID from trip according to destiny
     public int returnSelectedVoyageId(String destiny){
@@ -234,6 +215,8 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
     //*************************** ALERTS ********************************
 
+
+
     @Override
     public void onClick(DialogInterface dialog, int item) {
         Log.d("Options Dialog", "I am Here in OPTIONS ");
@@ -259,7 +242,7 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
                 break;
 
             case DialogInterface.BUTTON_POSITIVE:
-                itemVoyage.remove(selectedVoyage);
+                listVoyage().remove(selectedVoyage);
                 SQLiteDatabase db = helper.getReadableDatabase();
                 db.delete("voyage", "_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
                 db.delete("spending", "voyage_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
@@ -282,44 +265,26 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
 
 
     }
-
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(int position) {
 
         selectedDestinationId = 0;
         this.selectedVoyage = position;
         alertDialog.show();
 
-        map = itemVoyage.get(position);
-        String destiny = (String) map.get("destiny");
+        listVoyage().get(position);
+        String destiny = (String) listVoyage().get(position).getDestiny();
 
         setSelectedTripDestination(destiny);
         setSelectedDestinationId(returnSelectedVoyageId(destiny));  //get the selected voyage id
 
-        setSelectItemID(id + 1);
+        //setSelectItemID(id + 1);
         Log.d("SelectedTripID", "Destination: " + getSelectedTripDestination() + " ID: " + returnSelectedVoyageId(destiny) + " ItemId: " + getSelectItemID());
 
-        //Toast.makeText(getApplication(), "Item: " + position, Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(getApplication(), "Item: " + position, Toast.LENGTH_SHORT).show();
 
     }
 
-
-
-
-    @Override
-    public boolean setViewValue(View view, Object data, String textRepresentation) {
-        if (view.getId() == R.id.progressBar) {
-                Double values[] = (Double[]) data;
-                ProgressBar progressBar = (ProgressBar) view;
-                progressBar.setMax(values[0].intValue());
-                progressBar.setSecondaryProgress(values[1].intValue());
-                progressBar.setProgress(values[2].intValue());
-                return true;
-        }
-
-        return false;
-    }
 
 
     //Getters and Setters
@@ -362,4 +327,6 @@ public class VoyageListActivity extends ListActivity implements AdapterView.OnIt
     public void setSelectItemID(long selectItemID) {
         this.selectItemID = selectItemID;
     }
+
+
 }

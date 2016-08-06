@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp"
+    android:id="@+id/containerSpendModel"
+    tools:context=".SpendListActivity">
+
+
+    <TextView
+        android:id="@+id/spendDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_vertical"
+        android:text="@string/spending_date"
+        android:textStyle="italic" />
+
+    <RelativeLayout
+        android:id="@+id/linearLayoutSpendLimit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spendDate"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:id="@+id/imgSpendIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/linearLayoutSpendCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/linearLayoutSpendLimit"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/linearLayoutSpendLimit">
+
+        <TextView
+            android:id="@+id/spendDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spend_description"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/spendValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spend_value"
+            android:layout_below="@id/spendDescription"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="15sp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/spendValue"
+            android:background="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/imgSpendStar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@android:drawable/star_big_off"
+            android:layout_alignBottom="@+id/spendValue"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

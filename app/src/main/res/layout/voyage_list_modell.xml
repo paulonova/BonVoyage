@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="185dp">
+    android:layout_height="181dp"
+    android:elevation="4dp"
+    android:id="@+id/container_model">
 
     <ImageView
         android:id="@+id/img_type_voyage"
@@ -10,6 +12,17 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/photo_vacation"
         android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/txtVoyageType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:gravity="end"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:text="@string/type_voyage"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -70,13 +83,22 @@
 
             <TextView
                 android:id="@+id/txtBudgetYouHave"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtDateYouGo"
                 android:textColor="@android:color/white"
                 android:layout_toRightOf="@id/imgViewBudget"
                 android:layout_marginLeft="5dp"
                 android:text="@string/budget_you_have"/>
+
+            <TextView
+                android:id="@+id/txtTotalSpend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/total_spend"
+                android:layout_above="@+id/progressBar"
+                android:layout_alignEnd="@+id/txtDateYouGo" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -89,18 +111,8 @@
 
         </RelativeLayout>
 
-
-
-
-
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:elevation="4dp"
-        android:background="@color/colorPrimaryDark"/>
 
 
 </RelativeLayout>

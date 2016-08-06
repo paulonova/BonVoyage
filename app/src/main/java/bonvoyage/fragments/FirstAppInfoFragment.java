@@ -1,7 +1,6 @@
 package bonvoyage.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,7 +41,7 @@ public class FirstAppInfoFragment extends Fragment implements TabHost.OnTabChang
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first_app_info, container, false);
+        return inflater.inflate(R.layout.fragment_app_info, container, false);
     }
 
 

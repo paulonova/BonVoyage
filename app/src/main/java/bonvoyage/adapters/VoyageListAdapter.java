@@ -1,14 +1,22 @@
 package bonvoyage.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Map;
@@ -16,78 +24,113 @@ import java.util.Map;
 import bonvoyage.database.DatabaseHelper;
 import bonvoyage.objects.Voyage;
 import se.paulo.nackademin.examen.bonvoyage.R;
+import se.paulo.nackademin.examen.bonvoyage.SpendListActivity;
+import se.paulo.nackademin.examen.bonvoyage.VoyageListActivity;
 
 /**
  * Created by Paulo Vila Nova on 2016-07-18.
  */
-public class VoyageListAdapter extends SimpleAdapter{
+public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.VoyageHolder> {
 
-    private List<? extends Map<String, ?>> data;
-    Context context;
-    DatabaseHelper helper;
+    private List<Voyage> listData;
+    private LayoutInflater inflater;
+    private Context context;
 
+    //Creating an Interface..
+    private ItemClickCallBack itemClickCallBack;
 
-    /**
-     * Constructor
-     *
-     * @param context  The context where the View associated with this SimpleAdapter is running
-     * @param data     A List of Maps. Each entry in the List corresponds to one row in the list. The
-     *                 Maps contain the data for each row, and should include all the entries specified in
-     *                 "from"
-     * @param resource Resource identifier of a view layout that defines the views for this list
-     *                 item. The layout file should include at least those named views defined in "to"
-     * @param from     A list of column names that will be added to the Map associated with each
-     *                 item.
-     * @param to       The views that should display column in the "from" parameter. These should all be
-     *                 TextViews. The first N views in this list are given the values of the first N columns
-     */
-    public VoyageListAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
-        super(context, data, resource, from, to);
-        this.data = data;
-        this.context = context;
+    public interface ItemClickCallBack{
+        void onItemClick(int p);
     }
 
-    // Ett sätt att optimera ListView ytterligare
-    static class MyViewHolder {
-        ImageView voyageType;
-        TextView placeToGo, dateToGo, budgetYouHave;
-        ProgressBar progressBar;
+    public void setItemClickCallBack(ItemClickCallBack itemClickCallBack) {
+        this.itemClickCallBack = itemClickCallBack;
     }
 
+    public final int IMAGE_VACATION = R.drawable.photo_vacation;
+    public final int IMAGE_BUSINESS = R.drawable.photo_business;
+
+    public VoyageListAdapter(List<Voyage> listData, Context c) {
+        this.listData = listData;
+        this.inflater = LayoutInflater.from(c);
+        this.context = c;
+    }
+
+    @Override
+    public VoyageHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+
+        View view = inflater.inflate(R.layout.voyage_list_modell, parent, false);
+
+        return new VoyageHolder(view);
+    }
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public void onBindViewHolder(VoyageHolder holder, final int position) {
+        Voyage item = listData.get(position);
 
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-        View itemView;
-        MyViewHolder myViewHolder = new MyViewHolder();
-
-        if(convertView == null){
-            itemView = layoutInflater.inflate(R.layout.voyage_list_modell, parent, false);
-            myViewHolder.voyageType = (ImageView)itemView.findViewById(R.id.img_type_voyage);
-            myViewHolder.placeToGo = (TextView)itemView.findViewById(R.id.txtPlaceYouGo);
-            myViewHolder.dateToGo = (TextView)itemView.findViewById(R.id.txtDateYouGo);
-            myViewHolder.budgetYouHave = (TextView)itemView.findViewById(R.id.txtBudgetYouHave);
-
-            myViewHolder.progressBar = (ProgressBar)itemView.findViewById(R.id.progressBar);
-            //itemView.setTag(myViewHolder);
-
-        }else {
-            itemView = convertView;
+        if(item.getTypeVoyage().contains("Vacation")){
+            holder.voyageType.setImageResource(IMAGE_VACATION);
+        }else{
+            holder.voyageType.setImageResource(IMAGE_BUSINESS);
         }
+        holder.txtVoyageType.setText(item.getTypeVoyage());
+        holder.placeToGo.setText(item.getDestiny());
+        holder.dateToGo.setText(item.getArrivalDate() + " to " + item.getExitDate());
+        holder.budgetYouHave.setText("Budget: " + item.getBudget().toString());
+        holder.txtTotalSpend.setText("Total Spend: " + item.getTotalSpend());
 
 
-        return itemView;
+        //value = item.getBudget().intValue() / (int)item.getTotalSpend();
+        holder.progressBar.setMax(item.getBudget().intValue());
+        holder.progressBar.setSecondaryProgress((int) item.getAlertSpend());  //limit (week color)
+        holder.progressBar.setProgress((int)item.getTotalSpend());  //spend (strong color)
+
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return listData.size();
     }
 
 
 
+    class VoyageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public void remove(long position) {
-        if (position >= 0 && data.size() < position && data.get((int) position) != null) {
-            data.remove(position);
+        private ImageView voyageType;
+        private TextView placeToGo, dateToGo, budgetYouHave, txtVoyageType, txtTotalSpend;
+        private ProgressBar progressBar;
+        private View container;
+
+        public VoyageHolder(final View itemView) {
+            super(itemView);
+
+            voyageType = (ImageView) itemView.findViewById(R.id.img_type_voyage);
+            placeToGo = (TextView) itemView.findViewById(R.id.txtPlaceYouGo);
+            txtVoyageType = (TextView) itemView.findViewById(R.id.txtVoyageType);
+            txtTotalSpend = (TextView) itemView.findViewById(R.id.txtTotalSpend);
+            dateToGo = (TextView) itemView.findViewById(R.id.txtDateYouGo);
+            budgetYouHave = (TextView) itemView.findViewById(R.id.txtBudgetYouHave);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+
+            container = itemView.findViewById(R.id.container_model);
+            container.setOnClickListener(this);
+
+        }
+
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()){
+                case R.id.container_model:
+                    itemClickCallBack.onItemClick(getAdapterPosition());
+                    break;
+            }
+
         }
     }
 
