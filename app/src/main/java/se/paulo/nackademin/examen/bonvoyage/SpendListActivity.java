@@ -12,16 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bonvoyage.adapters.SpendingListAdapter;
 import bonvoyage.database.DatabaseHelper;
@@ -35,24 +29,21 @@ import butterknife.ButterKnife;
 public class SpendListActivity extends AppCompatActivity implements SpendingListAdapter.ItemClickCallBack  {
 
     private DatabaseHelper helper;
-    private SimpleDateFormat dateFormat;
-    private List<Map<String, Object>> spend;
     private String dateBefore = "";
 
     private String selectedDescription;
     private int selectedIdSpend;
-    @Bind(R.id.spendToolbar) Toolbar toolbar;
+    private int ItemId;
+    private AlertDialog alert;
 
+
+    @Bind(R.id.spendToolbar) Toolbar toolbar;
     private RecyclerView recView;
     private SpendingListAdapter adapter;
 
     Spending spending;
 
 
-
-    private int ItemId;
-
-    private AlertDialog alert;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,15 +63,7 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
         });
 
         helper = new DatabaseHelper(this);
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-
-//        String[] from = {"date", "description", "value", "category"};
-//        int[] to = {R.id.spend_date, R.id.spend_description, R.id.spend_value, R.id.linearLayoutSpendCategory};
-//
-//        SimpleAdapter adapter = new SimpleAdapter(this, spendList(), R.layout.spend_list, from, to);
-//        adapter.setViewBinder(new SpendViewBinder()); // class SpendViewBinder
-//        setListAdapter(adapter);
-//        getListView().setOnItemClickListener(this);
+        //dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         recView = (RecyclerView)findViewById(R.id.spending_fragment_list);
         //LayoutManager: GridLayoutManager and StaggeredGridLayoutManager
@@ -92,7 +75,6 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
 
         // register the new context menu..
         registerForContextMenu(recView);
-
         retrieveActualTripID();
 
     }
@@ -214,38 +196,12 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(this, VoyageListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         finish();
     }
 
-
-
-    private class SpendViewBinder implements SimpleAdapter.ViewBinder {
-
-
-        @Override
-        public boolean setViewValue(View view, Object data, String textRepresentation) {
-
-            Log.d("TEst Spend","View :" + view + " data: " + data + " textRepresentation: " + textRepresentation);
-
-            if (view.getId() == R.id.spendDate) {
-                if (!dateBefore.equals(data)) {
-                    TextView textView = (TextView) view;
-                    textView.setText(textRepresentation);
-                    dateBefore = textRepresentation;
-                    view.setVisibility(View.VISIBLE);
-                } else {
-                    view.setVisibility(View.GONE);
-                }
-                return true;
-            }
-            if (view.getId() == R.id.linearLayoutSpendCategory) {
-                Integer id = (Integer) data;
-                view.setBackgroundColor(getResources().getColor(id));
-                return true;
-            }
-            return false;
-        }
-    }
 
 
     //GETTERS AND SETTERS

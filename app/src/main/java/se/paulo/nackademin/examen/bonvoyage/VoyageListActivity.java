@@ -15,22 +15,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bonvoyage.adapters.VoyageListAdapter;
 import bonvoyage.database.DatabaseHelper;
 import bonvoyage.fragments.SpendingFragment;
+import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 
 //ListActivity
@@ -39,7 +34,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     private DatabaseHelper helper;
     private SimpleDateFormat dateFormat;
-
     private Double limitValue;
 
     private AlertDialog dialogConfirmation;
@@ -51,10 +45,9 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     SpendingFragment spendingFragment = null;
     Voyage voyage;
+    Spending spending;
 
     private int selectedVoyage;
-//    private List<Map<String, Object>> itemVoyage;
-//    Map<String, Object> map;
 
     private double totalSpend;
     private double alertLimit;
@@ -67,14 +60,17 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
     private RecyclerView recView;
     private VoyageListAdapter adapter;
 
-    public static final String TRIP_VACATIONS = "Vacation";
-    public static final String TRIP_BUSINESS = "Business";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voyage_list);
 
+        helper = new DatabaseHelper(this);
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        spending = new Spending();
+
+        //ToolBar setting
         imageButton = (ImageButton)findViewById(R.id.img_menu_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,8 +82,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
             }
         });
 
-        helper = new DatabaseHelper(this);
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         //Getting a current userId
         myPreferences = getSharedPreferences(LoginPage.USER_INFO_PREFERENCE, Context.MODE_PRIVATE);
@@ -128,9 +122,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         Cursor cursor = db.rawQuery(sql, null);
         cursor.moveToFirst();
 
-
         if(cursor.getCount()== 0){
-
         }
 
         for (int i = 0; i < cursor.getCount(); i++) {
@@ -147,11 +139,8 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
             voyage.setNumberPeoples(cursor.getInt(6));
             voyage.setUser_id(cursor.getInt(7));
 
-
-
-            //double alert = voyage.getBudget() * limitValue / 100;
             voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);
-            voyage.setTotalSpend(calcTotalSpend(db, voyage.getId() + ""));
+            calcTotalSpend(db, voyage.getId() + "");
 
             Log.i("Database Info TRIP", "Info: " + "ID: " + voyage.getId() + " - " + "TypeVoyage: " + voyage.getTypeVoyage() + " - " +
                     "Destiny: " + voyage.getDestiny() + " - " + "ArrivalDate: " + voyage.getArrivalDate() + " - " +
@@ -166,6 +155,17 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         return data;
     }
 
+    public String saveSelectedVoyageIDInSharedPreferences(int itemId){
+        SharedPreferences pref = getSharedPreferences("selected_item_id", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("selected_item_id", itemId);
+        editor.commit();
+
+        Log.d("SELECTED ITEM ID","" +  pref.getInt("selected_item_id", 0));
+
+        return null;
+    }
+
 
     // Used to get the ID from trip according to destiny
     public int returnSelectedVoyageId(String destiny){
@@ -177,15 +177,34 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
         int result = cursorID.getInt(0);
         Log.d("Actual Id", "ID: " + result);
+        saveSelectedVoyageIDInSharedPreferences(result);
         return result;
     }
 
+    //    public void alertOmLimitValue() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Limit Alert");
+//        builder.setMessage(R.string.limit_alert);
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//        alert = builder.create();
+//        alert.show();
+//
+//    }
 
-    private double calcTotalSpend(SQLiteDatabase db, String id) {
+
+    public double calcTotalSpend(SQLiteDatabase db, String id) {
         Cursor cursor = db.rawQuery("SELECT SUM(value) FROM SPENDING WHERE VOYAGE_ID = ?", new String[]{id});
         cursor.moveToFirst();
         double total = cursor.getDouble(0);
         Log.d("SUM(value)", "VALUE: " + cursor.getDouble(0));
+        voyage.setTotalSpend(cursor.getDouble(0));
         cursor.close();
         return total;
     }
@@ -224,7 +243,8 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         switch(item){
 
             case 0: //New Spendings
-                Toast.makeText(getApplicationContext(), "Go to Spending Fragment..", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Go to Spending Fragment..", Toast.LENGTH_SHORT).show();
+
 
                 break;
 
@@ -327,6 +347,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
     public void setSelectItemID(long selectItemID) {
         this.selectItemID = selectItemID;
     }
+
 
 
 }

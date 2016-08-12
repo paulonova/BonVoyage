@@ -21,6 +21,9 @@ public class Spending {
     private Double value;
     private String place;
     private Integer voyageId;
+    private int selectedItemId;
+
+
 
     //Constructor
     public Spending(Integer id, String date, String category, String description, Double value, String place, Integer voyageId) {
@@ -92,5 +95,13 @@ public class Spending {
 
     public void setVoyageId(Integer voyageId) {
         this.voyageId = voyageId;
+    }
+
+    public int getSelectedItemId() {
+        return selectedItemId;
+    }
+
+    public void setSelectedItemId(int selectedItemId) {
+        this.selectedItemId = selectedItemId;
     }
 }

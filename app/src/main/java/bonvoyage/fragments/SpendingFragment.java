@@ -3,8 +3,12 @@ package bonvoyage.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +22,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import bonvoyage.database.DatabaseHelper;
+import bonvoyage.objects.Spending;
+import bonvoyage.objects.Voyage;
 import se.paulo.nackademin.examen.bonvoyage.R;
+import se.paulo.nackademin.examen.bonvoyage.VoyageListActivity;
 
 
 /**
@@ -42,6 +50,11 @@ public class SpendingFragment extends Fragment {
     private int selectedYear, selectedMonth, selectedDay;
     private String selectedDate;
     private String actualDate;
+    private String valueLimit;
+    private VoyageListActivity voyageListActivity;
+    Voyage voyage;
+    Spending spending;
+    private DatabaseHelper helper;
 
     //private AlertDialog alert;
 
@@ -100,6 +113,17 @@ public class SpendingFragment extends Fragment {
         actualDay = spendCalendar.get(Calendar.DAY_OF_MONTH);
         actualDate = actualYear + "/" + (actualMonth + 1) + "/" + actualDay;
         selectedDate = selectedYear + "/" + (selectedMonth + 1) + "/" + selectedDay;
+
+        voyageListActivity = new VoyageListActivity();
+        voyage = new Voyage();
+
+
+        // Instantiate SharedPreferences and retrieve the limit value of the budget..
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        valueLimit = preferences.getString("value_limit", "null");
+        Log.d("Limit Value Saved", "from SpendingActivity: " + valueLimit);
+
+        Log.d("CheckLimitBudget", "TotalSpend: " + voyageListActivity.getTotalSpend() + " - AlertLimit: " + voyageListActivity.getAlertLimit());
 
         // Inflate the layout for this fragment
         return rootView;
