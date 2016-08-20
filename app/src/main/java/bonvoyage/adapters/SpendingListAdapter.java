@@ -24,12 +24,6 @@ public class SpendingListAdapter extends RecyclerView.Adapter<SpendingListAdapte
     private LayoutInflater inflaterSpending;
     private Context context;
 
-//    public final int FUEL_COLOR = R.color.category_fuel;
-//    public final int FOOD_COLOR = R.color.category_feeding;
-//    public final int TRANSPORTATION_COLOR = R.color.category_transport;
-//    public final int ACCOMODATION_COLOR = R.color.category_accommodation;
-//    public final int OTHERS_COLOR = R.color.category_others;
-
     //Creating an Interface..
     private ItemClickCallBack itemClickCallBack;
 

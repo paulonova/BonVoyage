@@ -103,10 +103,6 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
         Cursor cursor = db.rawQuery(sql1, new String[]{Long.toString(retrieveActualTripID())});
         cursor.moveToFirst();
 
-        //spend = new ArrayList<Map<String, Object>>();
-
-        Log.d("SpendListActivity", "Passing here..");
-
         if(cursor.getCount()== 0){
             //Start en AlertDialog...
         }
@@ -123,11 +119,8 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
             spending.setCategory(cursor.getString(4));
             spending.setVoyageId(cursor.getInt(5));
 
-
             Log.d("Database Info", "BudgetTable: " + " id: "+ spending.getId() + " - " + spending.getDate() + " - " + spending.getDescription()
                     + " - " + spending.getValue() + " - " + spending.getDescription() + " - " + spending.getVoyageId());
-
-
 
             data.add(spending);
             cursor.moveToNext();

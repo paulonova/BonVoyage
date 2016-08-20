@@ -48,14 +48,12 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     public static final String SPENDING_PREFERENCE = "spending_info";
     public static final String VOYAGE_PREFERENCE = "voyage_info";
-
-    Bundle bundle;
+    private String isFromSpendList;
 
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
     VoyageListActivity voyageListActivity = null;
-    //ListVoyageFragment listVoyageFragment = null;
 
 
     private DatabaseHelper helper;
@@ -76,11 +74,21 @@ public class MenuVoyageActivity extends AppCompatActivity
         //Lock screen in ORIENTATION_PORTRAIT / don´t crash the Fragments..
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //This is the first view in DrawerLayout..
-        FirstAppInfoFragment firstAppInfoFragment = new FirstAppInfoFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_menu_container, firstAppInfoFragment);
-        fragmentTransaction.commit();
+        /** Define witch layout fragment will show - Spending or firstAppInfo*/
+        if(isFromVoyageList()){
+            spendingFragment = new SpendingFragment();
+            android.support.v4.app.FragmentTransaction fragmentSpendingTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentSpendingTransaction.replace(R.id.fragment_menu_container, spendingFragment);
+            fragmentSpendingTransaction.commit();
+        }else{
+            //This is the first view in DrawerLayout..
+            FirstAppInfoFragment firstAppInfoFragment = new FirstAppInfoFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_menu_container, firstAppInfoFragment);
+            fragmentTransaction.commit();
+        }
+
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -341,6 +349,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     // ************************************************ IMPLEMENTING OF SPENDING FRAGMENT ****************************************************
 
+
     public void saveSpending(View v){
 
         voyageListActivity = new VoyageListActivity();
@@ -430,13 +439,13 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     }
 
-    // Get from Bundle Extra the selected trip _id..
+    // Get from Bundle Extra the check if comes from VoyageListActivity
     public boolean isFromVoyageList(){
 
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b!=null){
-            boolean result = b.getBoolean("isFromVoyageList");
+            boolean result = b.getBoolean(VoyageListActivity.FROM_VOYAGE_LIST);
             Log.d("isFromVoyageList", "Bundle Extra: " + result);
             return result;
         }else {
@@ -444,6 +453,23 @@ public class MenuVoyageActivity extends AppCompatActivity
             return false;
         }
     }
+
+    // Get from Bundle Extra the selected voyage_id..
+    public int retrieveSelectedVoyageID(){
+
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        if(b!=null){
+            int result = b.getInt(VoyageListActivity.VOYAGE_ID);
+            Log.d("DestinationID", "Bundle Extra: " + result);
+            return result;
+        }else {
+            return 0;
+        }
+    }
+
+
+
 
     // Used to save spendings in the selected trip from TripList Activity..
     public void insertInSelectedVoyage(String category, String date, double value, String description, String place, int itemId){
@@ -457,7 +483,7 @@ public class MenuVoyageActivity extends AppCompatActivity
         values.put("value", value);
         values.put("description", description);
         values.put("place", place);
-        values.put("trip_id", itemId); // maybe it needs +1 because the first item is 0
+        values.put("voyage_id", itemId); // maybe it needs +1 because the first item is 0
 
         long result = db.insert("spending", null, values);
 
@@ -470,19 +496,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     }
 
-    // Get from Bundle Extra the selected trip _id..
-    public int retrieveSelectedVoyageID(){
 
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
-        if(b!=null){
-            int result = b.getInt("CameFromVoyageList");
-            Log.d("DestinationID", "Bundle Extra: " + result);
-            return result;
-        }else {
-            return 0;
-        }
-    }
 
 
 

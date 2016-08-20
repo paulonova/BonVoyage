@@ -32,31 +32,24 @@ import bonvoyage.objects.Voyage;
 public class VoyageListActivity extends AppCompatActivity implements VoyageListAdapter.ItemClickCallBack,
                                                                 DialogInterface.OnClickListener{
 
+    public static final String FROM_VOYAGE_LIST = "from_voyage_list";
+    public static final String VOYAGE_ID = "voyage_id";
     private DatabaseHelper helper;
-    private SimpleDateFormat dateFormat;
     private Double limitValue;
-
     private AlertDialog dialogConfirmation;
     private AlertDialog alertDialog;
-
     private long selectItemID;
     private String selectedTripDestination;
     private int selectedDestinationId;
-
-    SpendingFragment spendingFragment = null;
     Voyage voyage;
     Spending spending;
-
     private int selectedVoyage;
-
     private double totalSpend;
     private double alertLimit;
 
     SharedPreferences myPreferences;
     int currentUserId;
-
     ImageButton imageButton;
-
     private RecyclerView recView;
     private VoyageListAdapter adapter;
 
@@ -67,7 +60,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         setContentView(R.layout.activity_voyage_list);
 
         helper = new DatabaseHelper(this);
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         spending = new Spending();
 
         //ToolBar setting
@@ -101,7 +93,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         /*Implementing of RecyclerView*/
 
         recView = (RecyclerView)findViewById(R.id.voyage_fragment_list);
-        //LayoutManager: GridLayoutManager and StaggeredGridLayoutManager
         recView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new VoyageListAdapter(listVoyage(), this);
@@ -243,8 +234,12 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         switch(item){
 
             case 0: //New Spendings
-                //Toast.makeText(getApplicationContext(), "Go to Spending Fragment..", Toast.LENGTH_SHORT).show();
-
+                Intent spendIntent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+                spendIntent.putExtra(FROM_VOYAGE_LIST, true);
+                spendIntent.putExtra(VOYAGE_ID, getSelectedDestinationId());
+                Log.d("TEST ID","" + getSelectedDestinationId());
+                startActivity(spendIntent);
+                finish();
 
                 break;
 
