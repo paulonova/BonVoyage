@@ -64,6 +64,7 @@ public class BonvoyageDB {
             Log.e("dropAllDataBase", "ERROR: dropAllDataBase" + e.getMessage());
         }
 
+        db.close();
 
     }
 
@@ -105,6 +106,8 @@ public class BonvoyageDB {
         }catch (SQLiteException e){
             Log.e("dropAllDataBase", "ERROR: dropAllDataBase" + e.getMessage());
         }
+
+        db.close();
 
 
     }

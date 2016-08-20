@@ -52,6 +52,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
     ImageButton imageButton;
     private RecyclerView recView;
     private VoyageListAdapter adapter;
+    AlertDialog alert;
 
 
     @Override
@@ -91,7 +92,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         limitValue = Double.valueOf(value);
 
         /*Implementing of RecyclerView*/
-
         recView = (RecyclerView)findViewById(R.id.voyage_fragment_list);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -172,22 +172,22 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         return result;
     }
 
-    //    public void alertOmLimitValue() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Limit Alert");
-//        builder.setMessage(R.string.limit_alert);
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
-//        alert = builder.create();
-//        alert.show();
-//
-//    }
+        public void alertOmLimitValue() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Limit Alert");
+        builder.setMessage(R.string.limit_alert);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alert = builder.create();
+        alert.show();
+
+    }
 
 
     public double calcTotalSpend(SQLiteDatabase db, String id) {

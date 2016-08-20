@@ -41,14 +41,14 @@ import bonvoyage.preferences.SettingsActivity;
 public class MenuVoyageActivity extends AppCompatActivity
                                 implements NavigationView.OnNavigationItemSelectedListener {
 
+
+
+    public static final String VOYAGE_PREFERENCE = "voyage_info";
+
     NavigationView navigationView = null;
     Toolbar toolbar = null;
     Voyage voyage;
     Spending spending;
-
-    public static final String SPENDING_PREFERENCE = "spending_info";
-    public static final String VOYAGE_PREFERENCE = "voyage_info";
-    private String isFromSpendList;
 
     //All Fragments..
     NewVoyageFragment voyageFragment = null;
@@ -58,12 +58,10 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     private DatabaseHelper helper;
 
-    //From nav_header_menu.xml ==> DrawerView viewGroups..
     TextView userName, userEmail;
     SharedPreferences myPreferences;
 
     int currentUserId;
-    CheckBox beConnected;
 
 
     @Override
@@ -338,7 +336,6 @@ public class MenuVoyageActivity extends AppCompatActivity
         editor.putInt("current_voyage", helper.getVoyageInfo(userId).getId());
 
         editor.apply();
-
         Log.d("SharedPreferences", "** VOYAGE - Saved in Preferences**" + helper.getVoyageInfo(userId).getId());
     }
 
