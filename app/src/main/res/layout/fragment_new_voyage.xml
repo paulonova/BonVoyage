@@ -159,7 +159,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:drawableLeft="@drawable/ic_save_24dp"
-            android:onClick="saveTrip"
+            android:onClick="saveVoyage"
             android:text="@string/save_voyage" />
 
 

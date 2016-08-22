@@ -86,8 +86,6 @@ public class MenuVoyageActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
 
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -269,7 +267,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     }
 
 
-    public void saveTrip(View v){
+    public void saveVoyage(View v){
 
         SQLiteDatabase db = helper.getWritableDatabase();
         voyage = new Voyage();
@@ -359,7 +357,7 @@ public class MenuVoyageActivity extends AppCompatActivity
             if(isFromVoyageList()){
                 insertInSelectedVoyage(spending.getCategory(), spending.getDate(), spending.getValue(), spending.getDescription(), spending.getPlace(), retrieveSelectedVoyageID());
                 Log.i("Comming from VoyageList", spending.getCategory() + spending.getDate() + spending.getValue() + spending.getDescription() + spending.getPlace() + retrieveSelectedVoyageID());
-                finish();
+
 
             }else{
                 ContentValues values = new ContentValues();
@@ -382,8 +380,15 @@ public class MenuVoyageActivity extends AppCompatActivity
             finish();
         }
 
+        startMenuVoyageActivity();
+    }
+
+
+    //Method to start MenuVoyage
+    public void startMenuVoyageActivity(){
+        Intent intent = new Intent(getApplicationContext(), MenuVoyageActivity.class);
+        startActivity(intent);
         finish();
-        startActivity(getIntent());
     }
 
 
@@ -490,6 +495,8 @@ public class MenuVoyageActivity extends AppCompatActivity
             Toast.makeText(this, "Register NOT saved! ", Toast.LENGTH_SHORT).show();
 
         }
+
+
 
     }
 

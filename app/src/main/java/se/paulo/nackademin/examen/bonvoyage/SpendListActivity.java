@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
 
     private String selectedDescription;
     private int selectedIdSpend;
-    private int ItemId;
+    ImageButton imageButton;
     private AlertDialog alert;
 
 
@@ -52,9 +53,9 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
 
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        //ToolBar
+        imageButton = (ImageButton)findViewById(R.id.img_menu_spend_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -63,12 +64,9 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
         });
 
         helper = new DatabaseHelper(this);
-        //dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         recView = (RecyclerView)findViewById(R.id.spending_fragment_list);
-        //LayoutManager: GridLayoutManager and StaggeredGridLayoutManager
         recView.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new SpendingListAdapter(spendList(), this);
         recView.setAdapter(adapter);
         adapter.setItemClickCallBack(this);
