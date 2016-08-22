@@ -37,8 +37,6 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
     ImageButton imageButton;
     private AlertDialog alert;
 
-
-    @Bind(R.id.spendToolbar) Toolbar toolbar;
     private RecyclerView recView;
     private SpendingListAdapter adapter;
 
@@ -51,7 +49,6 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.spend_list);
 
-        ButterKnife.bind(this);
 
         //ToolBar
         imageButton = (ImageButton)findViewById(R.id.img_menu_spend_button);

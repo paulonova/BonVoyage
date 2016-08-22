@@ -1,7 +1,6 @@
 package se.paulo.nackademin.examen.bonvoyage;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,15 +15,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import bonvoyage.adapters.VoyageListAdapter;
 import bonvoyage.database.DatabaseHelper;
-import bonvoyage.fragments.SpendingFragment;
 import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 
@@ -34,6 +32,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     public static final String FROM_VOYAGE_LIST = "from_voyage_list";
     public static final String VOYAGE_ID = "voyage_id";
+    public static final String IS_CHECK_BOX_SELECTED = "isCheckBoxSelected";
     private DatabaseHelper helper;
     private Double limitValue;
     private AlertDialog dialogConfirmation;
@@ -46,6 +45,10 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
     private int selectedVoyage;
     private double totalSpend;
     private double alertLimit;
+    private boolean showLimitCheckBox;
+    Switch limitSwitchButton;
+
+
 
     SharedPreferences myPreferences;
     int currentUserId;
@@ -62,6 +65,9 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
         helper = new DatabaseHelper(this);
         spending = new Spending();
+        limitSwitchButton = (Switch)this.findViewById(R.id.switch_on_off);
+//        SharedPreferences prefs = this.getSharedPreferences(IS_CHECK_BOX_SELECTED, Context.MODE_PRIVATE);  //TODO:
+//        prefs.getBoolean(IS_CHECK_BOX_SELECTED, false);
 
         //ToolBar setting
         imageButton = (ImageButton)findViewById(R.id.img_menu_button);
@@ -86,9 +92,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         String value = preferences.getString("value_limit", "80"); // 0 to 100%
         Log.d("Limit Value Saved", "The Value is: " + value);
 
-        /**TODO: Need to implement the Limit Spend Value Alert
-         * HERE ! *********************************************/
-
         limitValue = Double.valueOf(value);
 
         /*Implementing of RecyclerView*/
@@ -103,6 +106,9 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         this.dialogConfirmation = buildDialogConfirmation();
 
     }
+
+
+
 
     public  List<Voyage> listVoyage() {
 
@@ -130,14 +136,23 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
             voyage.setNumberPeoples(cursor.getInt(6));
             voyage.setUser_id(cursor.getInt(7));
 
-            voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);
+            voyage.setShowLimitAlertDialog(true);
+
+            voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);  //TODO: working here!
             calcTotalSpend(db, voyage.getId() + "");
+            Log.d("SWITCH BUTTON","" + voyage.isShowLimitAlertDialog());
+
+//            if(voyage.isShowLimitAlertDialog()){
+//                alertOmLimitValue(voyage);
+//            }
+
 
             Log.i("Database Info TRIP", "Info: " + "ID: " + voyage.getId() + " - " + "TypeVoyage: " + voyage.getTypeVoyage() + " - " +
                     "Destiny: " + voyage.getDestiny() + " - " + "ArrivalDate: " + voyage.getArrivalDate() + " - " +
                     "ExitDate: " + voyage.getExitDate() + " - " + "Budget: " + voyage.getBudget() + " - Number of people: " + voyage.getNumberPeoples());
 
             data.add(voyage);
+            Log.d("CHECKING THE LIMITS"," limitValue: " + voyage.getAlertSpend() );
             cursor.moveToNext();
 
         }
@@ -157,7 +172,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         return null;
     }
 
-
     // Used to get the ID from trip according to destiny
     public int returnSelectedVoyageId(String destiny){
 
@@ -172,20 +186,44 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         return result;
     }
 
-        public void alertOmLimitValue() {
+    //Save value from LimitCheckBox in SheredPreferences to retrieve on start activity..
+    public String saveLimitCheckBoxInSharedPreferences(boolean isChecked){
+        SharedPreferences pref = getSharedPreferences(IS_CHECK_BOX_SELECTED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(IS_CHECK_BOX_SELECTED, true);
+        editor.commit();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Limit Alert");
-        builder.setMessage(R.string.limit_alert);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        Log.d("SELECTED ITEM ID","" +  pref.getBoolean(IS_CHECK_BOX_SELECTED, false));
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        return null;
+    }
 
+
+
+        //AlertDialog to limitSpending..
+        public void alertOmLimitValue(Voyage voyage) {
+
+            if(voyage.getTotalSpend() > voyage.getAlertSpend()){
+//                alertOmLimitValue(voyage.getDestiny());
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Limit Alert");
+                String msg = "Hi! " + "In voyage: " + voyage.getDestiny() + ", You are in the limit of your budget!";
+                builder.setIcon(R.drawable.cash_multiple);
+                builder.setMessage(msg);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                    }
+                });
+                alert = builder.create();
+                alert.show();
+
+
+            }else{
+                //Do nothing
             }
-        });
-        alert = builder.create();
-        alert.show();
 
     }
 
@@ -196,6 +234,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         double total = cursor.getDouble(0);
         Log.d("SUM(value)", "VALUE: " + cursor.getDouble(0));
         voyage.setTotalSpend(cursor.getDouble(0));
+
         cursor.close();
         return total;
     }
@@ -262,13 +301,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
                 db.delete("voyage", "_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
                 db.delete("spending", "voyage_id=?", new String[]{Integer.toString(getSelectedDestinationId())});
 
-
-                /*TODO: I need to make the remove item better without start activity */
-//                Log.d("SELECTED ItemID", "" + (getSelectItemID()-1));
-//                voyageListAdapter.remove(getSelectItemID() - 1);
-//                voyageListAdapter.notifyDataSetChanged();
-//                getListView().setAdapter(voyageListAdapter);
-
                 startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));  //to restart the activity without finish()
                 break;
 
@@ -280,6 +312,25 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
 
     }
+
+    @Override
+    public void onSwitchButtonClick(int position) { //TODO: implement switch button here..
+
+        voyage = (Voyage)listVoyage().get(position);
+        //alertOmLimitValue(listVoyage().get(position));
+        //limitSwitchButton.isChecked();
+
+
+//        Log.d("SelectedSwitch", "Item: " + position + " Destiny " + voyage.getDestiny() +  " isChecked: " + limitSwitchButton.isChecked());
+
+//        boolean switchButton = (Boolean) listVoyage().get(position).isShowLimitAlertDialog();
+//        listVoyage().get(position).setShowLimitAlertDialog(true);
+//        limitSwitchButton.setChecked(listVoyage().get(position).isShowLimitAlertDialog());
+//
+//        Log.d("SelectedSwitch", "Item: " + position + " isChecked: " + limitSwitchButton.isChecked() + " " + switchButton);
+//        //Toast.makeText(getApplication(), "Item: " + position + " isChecked: " + limitSwitchButton.isChecked() + " " + switchButton, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onItemClick(int position) {
 
@@ -289,14 +340,12 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
         listVoyage().get(position);
         String destiny = (String) listVoyage().get(position).getDestiny();
-
         setSelectedTripDestination(destiny);
         setSelectedDestinationId(returnSelectedVoyageId(destiny));  //get the selected voyage id
 
         //setSelectItemID(id + 1);
         Log.d("SelectedTripID", "Destination: " + getSelectedTripDestination() + " ID: " + returnSelectedVoyageId(destiny) + " ItemId: " + getSelectItemID());
 
-        Toast.makeText(getApplication(), "Item: " + position, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -341,6 +390,15 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     public void setSelectItemID(long selectItemID) {
         this.selectItemID = selectItemID;
+    }
+
+
+    public boolean isShowLimitCheckBox() {
+        return showLimitCheckBox;
+    }
+
+    public void setShowLimitCheckBox(boolean showLimitCheckBox) {
+        this.showLimitCheckBox = showLimitCheckBox;
     }
 
 

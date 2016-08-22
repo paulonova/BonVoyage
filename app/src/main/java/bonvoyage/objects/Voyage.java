@@ -30,6 +30,8 @@ public class Voyage {
     private double totalSpend;
     private double alertSpend;
 
+    private boolean showLimitAlertDialog;
+
 
 
     //Constructors
@@ -158,4 +160,16 @@ public class Voyage {
     public void setActualVoyage(Integer actualVoyage) {
         this.actualVoyage = actualVoyage;
     }
+
+
+    //AlertDialog Show boolean..
+    public boolean isShowLimitAlertDialog() {
+        return showLimitAlertDialog;
+    }
+
+    public void setShowLimitAlertDialog(boolean showLimitAlertDialog) {
+        this.showLimitAlertDialog = showLimitAlertDialog;
+    }
+
+
 }
