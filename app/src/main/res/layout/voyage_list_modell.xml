@@ -24,17 +24,6 @@
         android:textStyle="bold"
         android:text="@string/type_voyage"/>
 
-    <Switch
-        android:id="@+id/switch_on_off"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:layout_marginRight="10dp"
-        android:textOff="OFF"
-        android:textOn="ON"
-        android:layout_below="@+id/txtVoyageType"
-        android:layout_alignParentEnd="true" />
-
 
 
     <RelativeLayout

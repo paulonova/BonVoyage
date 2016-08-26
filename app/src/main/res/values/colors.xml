@@ -8,6 +8,7 @@
     <color name="black">#000000</color>
     <color name="black_overlay">#66000000</color>
     <color name="title">#8b691d</color>
+    <color name="alert_red">#8b241d</color>
 
 
 </resources>

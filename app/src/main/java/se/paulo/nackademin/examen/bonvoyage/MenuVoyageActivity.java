@@ -54,7 +54,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     NewVoyageFragment voyageFragment = null;
     SpendingFragment spendingFragment = null;
     VoyageListActivity voyageListActivity = null;
-
+    SQLiteDatabase db;
 
     private DatabaseHelper helper;
 
@@ -394,7 +394,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     public boolean checkEmptyData(){
         // Get the actual id..
-        SQLiteDatabase db = helper.getReadableDatabase();
+        db = helper.getReadableDatabase();
         String sql = "SELECT _id FROM voyage WHERE user_id=?";
         Cursor cursor = db.rawQuery(sql, new String[]{Integer.toString(currentUserId)}); // null can be replaced by WHERE argument..
         boolean data = cursor.moveToLast();    // To get the last Voyage table register
@@ -404,10 +404,11 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     }
 
+
     public void saveSpendingsToObjectSpending(){
 
         // Get the actual id..
-        SQLiteDatabase db = helper.getReadableDatabase();
+        db = helper.getReadableDatabase();
         String sql = "SELECT _id FROM voyage WHERE user_id=?";
         Cursor cursor = db.rawQuery(sql, new String[]{Integer.toString(currentUserId)});
         cursor.moveToLast();
@@ -477,7 +478,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     public void insertInSelectedVoyage(String category, String date, double value, String description, String place, int itemId){
 
 
-        SQLiteDatabase db = helper.getWritableDatabase();
+        db = helper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("category", category);
@@ -496,12 +497,6 @@ public class MenuVoyageActivity extends AppCompatActivity
 
         }
 
-
-
     }
-
-
-
-
 
 }

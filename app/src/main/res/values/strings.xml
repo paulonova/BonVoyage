@@ -188,6 +188,7 @@
     <string name="total_spend">Total Spend:</string>
     <string name="spending_list">Spending List</string>
     <string name="limit_alert">Hi! You are in the limit of your budget!</string>
+    <string name="show_alert">Show limit alert</string>
 
 
 </resources>

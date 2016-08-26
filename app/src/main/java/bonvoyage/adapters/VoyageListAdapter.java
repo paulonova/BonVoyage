@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,14 +41,12 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
     private List<Voyage> listData;
     private LayoutInflater inflater;
     private Context context;
-    SharedPreferences preferences;
 
     //Creating an Interface..
     private ItemClickCallBack itemClickCallBack;
 
     public interface ItemClickCallBack{
         void onItemClick(int p);
-        void onSwitchButtonClick(int p);
     }
 
     public void setItemClickCallBack(ItemClickCallBack itemClickCallBack) {
@@ -72,11 +74,8 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
     @Override
     public void onBindViewHolder(VoyageHolder holder, final int position) {
         Voyage item = listData.get(position);
-        //preferences = context.getSharedPreferences(VoyageHolder.SWITCH_BUTTON, Context.MODE_PRIVATE);
-        preferences = context.getSharedPreferences(VoyageHolder.SWITCH_BUTTON, Context.MODE_PRIVATE);
-        holder.limitSwitchButton.setChecked(true);
-        //Log.d("BoolenTest","" +  switchBtn);
-
+        Resources res = context.getResources();
+        VoyageListActivity voyageListActivity = new VoyageListActivity();
 
         if(item.getTypeVoyage().contains("Vacation")){
             holder.voyageType.setImageResource(IMAGE_VACATION);
@@ -90,12 +89,22 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
         holder.txtTotalSpend.setText("Total Spend: " + item.getTotalSpend());
 
 
-        //value = item.getBudget().intValue() / (int)item.getTotalSpend();
         holder.progressBar.setMax(item.getBudget().intValue());
+        Log.d("SET_MAX", "" + item.getBudget().intValue()); //background vlaue
+
         holder.progressBar.setSecondaryProgress((int) item.getAlertSpend());  //limit (week color)
-        holder.progressBar.setProgress((int)item.getTotalSpend());  //spend (strong color)
+        Log.d("SET_SECUNDARY_PROGRESS", "" + (int) item.getAlertSpend());
 
+        holder.progressBar.setProgress((int)item.getTotalSpend()); //spend (strong color)
+        Log.d("SET_PROGRESS", "" + (int) item.getTotalSpend());
 
+        if(item.getTotalSpend() > (int) item.getAlertSpend()){
+
+        }
+
+        /** SET_MAX = BUDGET
+         * SET_SECUNDARY_PROGRESS = LIMIT VALUE    totalSpend > limit = alert
+         * SET_PROGRESS = TOTAL_SPENDING*/
 
     }
 
@@ -108,11 +117,9 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
 
     class VoyageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public static final String SWITCH_BUTTON = "switch_button";
         private ImageView voyageType;
         private TextView placeToGo, dateToGo, budgetYouHave, txtVoyageType, txtTotalSpend;
         private ProgressBar progressBar;
-        private Switch limitSwitchButton;
         private View container;
 
         public VoyageHolder(final View itemView) {
@@ -126,21 +133,8 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
             budgetYouHave = (TextView) itemView.findViewById(R.id.txtBudgetYouHave);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
 
-            limitSwitchButton = (Switch)itemView.findViewById(R.id.switch_on_off);
-            limitSwitchButton.setOnClickListener(this);
-
             container = itemView.findViewById(R.id.container_model);
             container.setOnClickListener(this);
-
-        }
-
-        public void saveSharedPreferences(boolean result){
-            SharedPreferences pref = context.getSharedPreferences(SWITCH_BUTTON, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean(SWITCH_BUTTON, result);
-            editor.commit();
-
-            Log.d("SELECTED ITEM ID","" +  pref.getBoolean(SWITCH_BUTTON, false));
 
         }
 
@@ -151,14 +145,6 @@ public class VoyageListAdapter extends RecyclerView.Adapter<VoyageListAdapter.Vo
             switch (v.getId()){
                 case R.id.container_model:
                     itemClickCallBack.onItemClick(getAdapterPosition());
-
-                    break;
-
-                case R.id.switch_on_off:
-                    itemClickCallBack.onSwitchButtonClick(getAdapterPosition());
-                    limitSwitchButton.isChecked();
-                    saveSharedPreferences(limitSwitchButton.isChecked());
-                    Log.d("SWITCH","" + getAdapterPosition() + " " + limitSwitchButton.isChecked());
                     break;
 
             }

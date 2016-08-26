@@ -14,7 +14,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -32,29 +34,31 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     public static final String FROM_VOYAGE_LIST = "from_voyage_list";
     public static final String VOYAGE_ID = "voyage_id";
-    public static final String IS_CHECK_BOX_SELECTED = "isCheckBoxSelected";
+    public static final String SWITCH_BUTTON_CHECKED = "switch_button_checked";
+    //public static final String IS_CHECK_BOX_SELECTED = "isCheckBoxSelected";
+
     private DatabaseHelper helper;
     private Double limitValue;
     private AlertDialog dialogConfirmation;
+    private AlertDialog alertLimitDialog;
     private AlertDialog alertDialog;
     private long selectItemID;
     private String selectedTripDestination;
     private int selectedDestinationId;
-    Voyage voyage;
-    Spending spending;
     private int selectedVoyage;
     private double totalSpend;
     private double alertLimit;
     private boolean showLimitCheckBox;
-    Switch limitSwitchButton;
-
-
-
-    SharedPreferences myPreferences;
+    private boolean swithBottonChecked;
     int currentUserId;
-    ImageButton imageButton;
     private RecyclerView recView;
     private VoyageListAdapter adapter;
+
+    Voyage voyage;
+    Spending spending;
+    Switch limitSwitchButton;
+    SharedPreferences myPreferences;
+    ImageButton imageButton;
     AlertDialog alert;
 
 
@@ -66,8 +70,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         helper = new DatabaseHelper(this);
         spending = new Spending();
         limitSwitchButton = (Switch)this.findViewById(R.id.switch_on_off);
-//        SharedPreferences prefs = this.getSharedPreferences(IS_CHECK_BOX_SELECTED, Context.MODE_PRIVATE);  //TODO:
-//        prefs.getBoolean(IS_CHECK_BOX_SELECTED, false);
+
 
         //ToolBar setting
         imageButton = (ImageButton)findViewById(R.id.img_menu_button);
@@ -102,11 +105,57 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         recView.setAdapter(adapter);
         adapter.setItemClickCallBack(this);
 
+        // To handle if voyagelist is empty..
+        if(listVoyage().isEmpty()){
+            Toast.makeText(this, "There is no voyage registered! Register  one first..", Toast.LENGTH_LONG).show();
+            finish();
+        }else{
+            Log.d("LAST_VOYAGE_ID", "" + getLastVoyageInfo());
+        }
+
         this.alertDialog = buildAlertDialog();
         this.dialogConfirmation = buildDialogConfirmation();
 
+        //Handle the switch button
+        final SharedPreferences swichPrefs = getSharedPreferences(SWITCH_BUTTON_CHECKED,0);
+        final SharedPreferences.Editor editor = swichPrefs.edit();
+        setSwithBottonChecked(swichPrefs.getBoolean(SWITCH_BUTTON_CHECKED, false));
+        limitSwitchButton.setChecked(isSwithBottonChecked()); //false default
+
+        limitSwitchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean(SWITCH_BUTTON_CHECKED, isChecked);
+                editor.commit();
+            }
+        });
+
+
+        if(isSwithBottonChecked()){
+            if(voyage.getAlertSpend() < voyage.getTotalSpend()){
+                buildLimitAlertDialog();
+            }
+        }
+
     }
 
+
+    //Method to get the last voyage id from database..
+    public int getLastVoyageInfo(){
+
+        // Get the actual id..
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String sql = "SELECT _id, budget  FROM voyage WHERE user_id=?";
+        Cursor cursor = db.rawQuery(sql, new String[]{Integer.toString(currentUserId)}); // null can be replaced by WHERE argument..
+        cursor.moveToLast();    // To get the last Voyage table register
+        int voyageId = cursor.getInt(0);
+        double budget = cursor.getDouble(1);
+        Log.d("getLastVoyageInfo"," Value: " + voyageId);
+        Log.d("getLastVoyageInfo"," Value: " + budget);
+
+        return cursor.getInt(0);
+
+    }
 
 
 
@@ -138,14 +187,8 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
             voyage.setShowLimitAlertDialog(true);
 
-            voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);  //TODO: working here!
+            voyage.setAlertSpend((voyage.getBudget() * limitValue) / 100);
             calcTotalSpend(db, voyage.getId() + "");
-            Log.d("SWITCH BUTTON","" + voyage.isShowLimitAlertDialog());
-
-//            if(voyage.isShowLimitAlertDialog()){
-//                alertOmLimitValue(voyage);
-//            }
-
 
             Log.i("Database Info TRIP", "Info: " + "ID: " + voyage.getId() + " - " + "TypeVoyage: " + voyage.getTypeVoyage() + " - " +
                     "Destiny: " + voyage.getDestiny() + " - " + "ArrivalDate: " + voyage.getArrivalDate() + " - " +
@@ -156,7 +199,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
             cursor.moveToNext();
 
         }
-
         cursor.close();
         return data;
     }
@@ -184,47 +226,6 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         Log.d("Actual Id", "ID: " + result);
         saveSelectedVoyageIDInSharedPreferences(result);
         return result;
-    }
-
-    //Save value from LimitCheckBox in SheredPreferences to retrieve on start activity..
-    public String saveLimitCheckBoxInSharedPreferences(boolean isChecked){
-        SharedPreferences pref = getSharedPreferences(IS_CHECK_BOX_SELECTED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(IS_CHECK_BOX_SELECTED, true);
-        editor.commit();
-
-        Log.d("SELECTED ITEM ID","" +  pref.getBoolean(IS_CHECK_BOX_SELECTED, false));
-
-        return null;
-    }
-
-
-
-        //AlertDialog to limitSpending..
-        public void alertOmLimitValue(Voyage voyage) {
-
-            if(voyage.getTotalSpend() > voyage.getAlertSpend()){
-//                alertOmLimitValue(voyage.getDestiny());
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Limit Alert");
-                String msg = "Hi! " + "In voyage: " + voyage.getDestiny() + ", You are in the limit of your budget!";
-                builder.setIcon(R.drawable.cash_multiple);
-                builder.setMessage(msg);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alert.dismiss();
-                    }
-                });
-                alert = builder.create();
-                alert.show();
-
-
-            }else{
-                //Do nothing
-            }
-
     }
 
 
@@ -262,13 +263,37 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
         return builder.create();
     }
 
+    // AlertDialog to alert about spennding..
+    public AlertDialog buildLimitAlertDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Limit Alert");
+        String msg = "Hi! " + "In voyage: " + voyage.getDestiny() + ", You are in the limit of your budget!";
+        builder.setIcon(R.drawable.cash_multiple);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alert.dismiss();
+            }
+        });
+        alert = builder.create();
+
+        if(isSwithBottonChecked()){
+            alert.show();
+        }
+
+
+        return builder.create();
+    }
+
     //*************************** ALERTS ********************************
 
 
 
     @Override
     public void onClick(DialogInterface dialog, int item) {
-        Log.d("Options Dialog", "I am Here in OPTIONS ");
 
         switch(item){
 
@@ -313,23 +338,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
     }
 
-    @Override
-    public void onSwitchButtonClick(int position) { //TODO: implement switch button here..
 
-        voyage = (Voyage)listVoyage().get(position);
-        //alertOmLimitValue(listVoyage().get(position));
-        //limitSwitchButton.isChecked();
-
-
-//        Log.d("SelectedSwitch", "Item: " + position + " Destiny " + voyage.getDestiny() +  " isChecked: " + limitSwitchButton.isChecked());
-
-//        boolean switchButton = (Boolean) listVoyage().get(position).isShowLimitAlertDialog();
-//        listVoyage().get(position).setShowLimitAlertDialog(true);
-//        limitSwitchButton.setChecked(listVoyage().get(position).isShowLimitAlertDialog());
-//
-//        Log.d("SelectedSwitch", "Item: " + position + " isChecked: " + limitSwitchButton.isChecked() + " " + switchButton);
-//        //Toast.makeText(getApplication(), "Item: " + position + " isChecked: " + limitSwitchButton.isChecked() + " " + switchButton, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onItemClick(int position) {
@@ -393,12 +402,12 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
     }
 
 
-    public boolean isShowLimitCheckBox() {
-        return showLimitCheckBox;
+    public boolean isSwithBottonChecked() {
+        return swithBottonChecked;
     }
 
-    public void setShowLimitCheckBox(boolean showLimitCheckBox) {
-        this.showLimitCheckBox = showLimitCheckBox;
+    public void setSwithBottonChecked(boolean swithBottonChecked) {
+        this.swithBottonChecked = swithBottonChecked;
     }
 
 
