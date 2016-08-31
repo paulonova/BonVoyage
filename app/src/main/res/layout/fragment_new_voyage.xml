@@ -87,12 +87,12 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:text="@string/arrival_date"
+                    android:text="@string/departure_date"
                     android:textColor="#fe000000" />
 
                 <TextView
                     android:layout_gravity="center"
-                    android:text="@string/exit_date"
+                    android:text="@string/arrival_date"
                     android:textColor="#fe000000" />
             </TableRow>
 
@@ -102,15 +102,15 @@
                 android:layout_marginRight="5dp">
 
                 <Button
-                    android:id="@+id/arrivalBtn"
+                    android:id="@+id/exitBtn"
                     android:drawableLeft="@drawable/ic_calendar_24dp"
-                    android:onClick="showArrivalDatePickerDialog"
+                    android:onClick="showDepartureDatePickerDialog"
                     android:text="@string/select" />
 
                 <Button
-                    android:id="@+id/exitBtn"
+                    android:id="@+id/arrivalBtn"
                     android:drawableLeft="@drawable/ic_calendar_24dp"
-                    android:onClick="showExitDatePickerDialog"
+                    android:onClick="showArrivalDatePickerDialog"
                     android:text="@string/select" />
             </TableRow>
         </TableLayout>

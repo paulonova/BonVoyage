@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Method to get user information..
     public User getUserInfo(String username){
 
-        User user = null;
+        User user = new User();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = {"username", "email", "password", "_id"};
         String selection = "username=?";
@@ -178,6 +178,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean ifDatabaseIsEmpty(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor checkDb = db.rawQuery("SELECT COUNT(*) FROM user", null);
+
+        if(checkDb == null){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+    public boolean ifUserIsEmpty(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor checkDb = db.rawQuery("SELECT username FROM user", null);
 
         if(checkDb == null){
             return true;

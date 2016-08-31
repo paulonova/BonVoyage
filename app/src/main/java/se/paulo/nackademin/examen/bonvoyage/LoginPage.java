@@ -114,6 +114,10 @@ public class LoginPage extends AppCompatActivity {
                 if(!username.equals("") && !password.equals("")){
 
                     //Getting from Database all user information to login and everything else..
+                    //if(helper.getUserInfo(username).getUser_id() == 0)
+
+
+
                     int user_id = helper.getUserInfo(username).getUser_id();
                     String user_name = helper.getUserInfo(username).getUsername();
                     String user_password = helper.getUserInfo(username).getPassword();

@@ -62,7 +62,7 @@
     <string name="vacation">Vacation</string>
     <string name="business">Business</string>
     <string name="arrival_date">Arrival date</string>
-    <string name="exit_date">Departure date</string>
+    <string name="departure_date">Departure date</string>
     <string name="select">Select</string>
     <string name="text_budget"> Budget</string>
     <string name="number_of_people">Number of Persons:</string>

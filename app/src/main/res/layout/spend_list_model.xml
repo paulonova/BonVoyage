@@ -73,7 +73,7 @@
             android:id="@+id/imgSpendStar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@android:drawable/star_big_off"
+            android:src="@android:drawable/ic_menu_delete"
             android:layout_alignBottom="@+id/spendValue"
             android:layout_alignParentEnd="true" />
 

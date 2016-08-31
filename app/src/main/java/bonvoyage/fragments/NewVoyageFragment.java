@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import java.util.Calendar;
 
 import bonvoyage.database.DatabaseHelper;
-import bonvoyage.objects.Voyage;
 import se.paulo.nackademin.examen.bonvoyage.R;
 
 
@@ -30,7 +29,7 @@ public class NewVoyageFragment extends Fragment {
 //    private int day;
 
     public Button arrivalBtn;
-    public Button exitBtn;
+    public Button departureBtn;
     private Button saveBtn;
 
 //    RadioGroup typeTrip;
@@ -99,7 +98,7 @@ public class NewVoyageFragment extends Fragment {
         int day = exitCalendar.get(Calendar.DAY_OF_MONTH);
         String exitDate = year + "/" + (month + 1) + "/" + day;
 
-        exitBtn.setText(exitDate);
+        departureBtn.setText(exitDate);
 
     }
 
@@ -112,7 +111,7 @@ public class NewVoyageFragment extends Fragment {
 
 
         arrivalBtn = (Button)rootView.findViewById(R.id.arrivalBtn);
-        exitBtn = (Button)rootView.findViewById(R.id.exitBtn);
+        departureBtn = (Button)rootView.findViewById(R.id.exitBtn);
         updateArrivalDate();
         updateExitDate();
 

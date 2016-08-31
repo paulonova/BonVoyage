@@ -18,13 +18,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -258,12 +256,48 @@ public class MenuVoyageActivity extends AppCompatActivity
         setArriveDate();
     }
 
-    public void showExitDatePickerDialog(View v){
+    public void showDepartureDatePickerDialog(View v){
         setExitDate();
     }
 
     public void showSpendDatePickerDialog(View v){
         setSpendingDate();
+    }
+
+    //VALIDATING VOYAGE DATES
+    public boolean validateDateEntries(String departure, String arrival){
+
+        String[] arrParts = arrival.split("/"); //3 parts
+        Log.i("arDate","Ano: " + arrParts[0] + " Mes: " + arrParts[1] + " Dia: " + arrParts[2]);
+        int arrivalYear = Integer.parseInt(arrParts[0]);
+        int arrivalMonth = Integer.parseInt(arrParts[1]);
+        int arrivalDay = Integer.parseInt(arrParts[2]);
+
+        String[] arrExit = departure.split("/");
+        Log.i("arExit","Ano: " + arrExit[0] + " Mes: " + arrExit[1] + " Dia: " + arrExit[2]);
+        int departureYear = Integer.parseInt(arrExit[0]);
+        int departureMonth = Integer.parseInt(arrExit[1]);
+        int departureDay = Integer.parseInt(arrExit[2]);
+
+
+        if(departureYear <= arrivalYear ){
+            Log.i("YEARS","==> " + departureYear + " - " + arrivalYear);
+
+            if(departureYear == arrivalYear && departureMonth <= arrivalMonth){
+                Log.i("MONTH","==> " + departureMonth + " - " + arrivalMonth);
+
+                if(departureMonth == arrivalMonth && departureDay <= arrivalDay){
+                    Log.i("DAY","==> " + departureDay + " - " + arrivalDay);
+
+                    return true;
+
+                }
+                return false;
+            }
+            return false;
+
+        }
+        return false;
     }
 
 
@@ -272,49 +306,70 @@ public class MenuVoyageActivity extends AppCompatActivity
         SQLiteDatabase db = helper.getWritableDatabase();
         voyage = new Voyage();
 
-        int type = voyageFragment.radioGroup.getCheckedRadioButtonId();
-        if(type == R.id.vacationBtn){
-            voyage.setTypeVoyage(getString(R.string.vacation));
-        }else{
-            voyage.setTypeVoyage(getString(R.string.business));
-        }
+        boolean validateResult = validateDateEntries(voyageFragment.departureBtn.getText().toString(), voyageFragment.arrivalBtn.getText().toString());
+        Log.i("VALIDATE DATE", " Departure: " + voyageFragment.departureBtn.getText().toString() + " Arrival: " + voyageFragment.arrivalBtn.getText().toString() + " result: " + validateResult);
 
-        voyage.setDestiny(voyageFragment.destination.getText().toString());
-        voyage.setBudget(Double.parseDouble(voyageFragment.budget.getText().toString()));
-        voyage.setNumberPeoples(Integer.parseInt(voyageFragment.numberPerson.getText().toString()));
-        voyage.setArrivalDate(voyageFragment.arrivalBtn.getText().toString());
-        voyage.setExitDate(voyageFragment.exitBtn.getText().toString());
-        voyage.setUser_id(currentUserId);
+        //validations
+        if(!voyageFragment.destination.getText().toString().isEmpty() && !voyageFragment.budget.getText().toString().isEmpty()
+                                                                     && !voyageFragment.numberPerson.getText().toString().isEmpty()){
 
-        try {
-            ContentValues values = new ContentValues();
-            values.put("destiny", voyage.getDestiny());
-            values.put("type_voyage", voyage.getTypeVoyage());
-            values.put("arrive_date", voyage.getArrivalDate());
-            values.put("exit_date", voyage.getExitDate());
-            values.put("budget", voyage.getBudget());
-            values.put("number_peoples", voyage.getNumberPeoples());
-            values.put("user_id", currentUserId);
+            if(validateResult){
 
-            long result = db.insert("voyage", null, values);
-            if (result != -1) {
-                Toast.makeText(MenuVoyageActivity.this, "Voyage was inserted successfully!", Toast.LENGTH_SHORT).show();
-                Log.i("INSERT DATABASE", "SUCCESSFULLY");
+                voyage.setDestiny(voyageFragment.destination.getText().toString());
+                voyage.setBudget(Double.parseDouble(voyageFragment.budget.getText().toString()));
+                voyage.setNumberPeoples(Integer.parseInt(voyageFragment.numberPerson.getText().toString()));
+                voyage.setArrivalDate(voyageFragment.arrivalBtn.getText().toString());
+                voyage.setExitDate(voyageFragment.departureBtn.getText().toString());
+                voyage.setUser_id(currentUserId);
+
+                int type = voyageFragment.radioGroup.getCheckedRadioButtonId();
+                if(type == R.id.vacationBtn){
+                    voyage.setTypeVoyage(getString(R.string.vacation));
+                }else{
+                    voyage.setTypeVoyage(getString(R.string.business));
+                }
+
+
+                try {
+                    ContentValues values = new ContentValues();
+                    values.put("destiny", voyage.getDestiny());
+                    values.put("type_voyage", voyage.getTypeVoyage());
+                    values.put("arrive_date", voyage.getArrivalDate());
+                    values.put("exit_date", voyage.getExitDate());
+                    values.put("budget", voyage.getBudget());
+                    values.put("number_peoples", voyage.getNumberPeoples());
+                    values.put("user_id", currentUserId);
+
+                    long result = db.insert("voyage", null, values);
+                    if (result != -1) {
+                        Toast.makeText(MenuVoyageActivity.this, "Voyage was inserted successfully!", Toast.LENGTH_SHORT).show();
+                        Log.i("INSERT DATABASE", "SUCCESSFULLY");
+                    }
+
+                    //Save voyage info to retrieve before.
+                    saveVoyageInSharedPreferences(currentUserId);
+
+                }catch (SQLiteException e){
+                    Log.e("SOMETHING WRONG", "NOT-SUCCESSFULLY " + e.getMessage());
+                }
+
+                Log.e("Test database: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
+                        + " : " + voyage.getTypeVoyage() + " : " + voyage.getArrivalDate()
+                        + " : " + voyage.getExitDate() );
+
+                finish();
+                startActivity(getIntent());
+                //Toast.makeText(MenuVoyageActivity.this, "NOT EMPTY", Toast.LENGTH_SHORT).show();
+
+
+            }else {
+                Toast.makeText(MenuVoyageActivity.this, "Something wrong with dates! \n please verify..", Toast.LENGTH_LONG).show();
             }
 
-            //Save voyage info to retrieve before.
-            saveVoyageInSharedPreferences(currentUserId);
-
-        }catch (SQLiteException e){
-            Log.e("SOMETHING WRONG", "NOT-SUCCESSFULLY " + e.getMessage());
+        }else{
+            Toast.makeText(MenuVoyageActivity.this, "Fields are empties! try again..", Toast.LENGTH_SHORT).show();
         }
 
-        Log.e("Test database: "," " + voyage.getDestiny() + " : " + voyage.getBudget() + " : " + voyage.getNumberPeoples()
-                                + " : " + voyage.getTypeVoyage() + " : " + voyage.getArrivalDate()
-                                + " : " + voyage.getExitDate() );
-
-        finish();
-        startActivity(getIntent());
     }
 
 
@@ -345,42 +400,56 @@ public class MenuVoyageActivity extends AppCompatActivity
     // ************************************************ IMPLEMENTING OF SPENDING FRAGMENT ****************************************************
 
 
-    public void saveSpending(View v){
+    //VALIDATING SPENDING DATES
+    public boolean validateDateSpendEntries(String value, String description, String place){
 
-        voyageListActivity = new VoyageListActivity();
+
+        if(value.isEmpty() && description.isEmpty() && place.isEmpty()){
+            Toast.makeText(MenuVoyageActivity.this, "Fields cannot be empty! ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
+    public void saveSpending(View v){
 
         if(checkEmptyData()){
 
-            saveSpendingsToObjectSpending();
             SQLiteDatabase db = helper.getWritableDatabase();
 
-            if(isFromVoyageList()){
-                insertInSelectedVoyage(spending.getCategory(), spending.getDate(), spending.getValue(), spending.getDescription(), spending.getPlace(), retrieveSelectedVoyageID());
-                Log.i("Comming from VoyageList", spending.getCategory() + spending.getDate() + spending.getValue() + spending.getDescription() + spending.getPlace() + retrieveSelectedVoyageID());
+            if(validateDateSpendEntries(spendingFragment.value.getText().toString(), spendingFragment.description.getText().toString(), spendingFragment.place.getText().toString())){
+                saveSpendingToObjectSpending();
 
+                if(isFromVoyageList()){
+                    //TODO: Validate the date accord to the voyage date..
+                    insertInSelectedVoyage(spending.getCategory(), spending.getDate(), spending.getValue(), spending.getDescription(), spending.getPlace(), retrieveSelectedVoyageID());
 
-            }else{
-                ContentValues values = new ContentValues();
-                values.put("category", spending.getCategory());
-                values.put("date", spending.getDate());
-                values.put("place", spending.getPlace());
-                values.put("description", spending.getDescription());
-                values.put("value", spending.getValue());
-                values.put("voyage_id", spending.getVoyageId());
+                }else{
+                    ContentValues values = new ContentValues();
+                    values.put("category", spending.getCategory());
+                    values.put("date", spending.getDate());
+                    values.put("place", spending.getPlace());
+                    values.put("description", spending.getDescription());
+                    values.put("value", spending.getValue());
+                    values.put("voyage_id", spending.getVoyageId());
 
-                long result = db.insert("spending", null, values);
-                if (result != -1) {
-                    Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
-                    Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
+                    long result = db.insert("spending", null, values);
+                    if (result != -1) {
+                        Toast.makeText(MenuVoyageActivity.this, "Spending was inserted successfully!", Toast.LENGTH_SHORT).show();
+                        startMenuVoyageActivity();
+                        Log.i("DATABASE", "SPENDING INSERT SUCCESSFULLY");
+                    }
                 }
             }
 
         }else{
             Toast.makeText(getApplicationContext(), R.string.no_trip_msg, Toast.LENGTH_LONG).show();
-            finish();
-        }
 
-        startMenuVoyageActivity();
+        }
     }
 
 
@@ -405,7 +474,7 @@ public class MenuVoyageActivity extends AppCompatActivity
     }
 
 
-    public void saveSpendingsToObjectSpending(){
+    public void saveSpendingToObjectSpending(){
 
         // Get the actual id..
         db = helper.getReadableDatabase();
@@ -415,32 +484,29 @@ public class MenuVoyageActivity extends AppCompatActivity
         int voyageId = cursor.getInt(0);
         Log.d("TripId from spending", "tripId: " + voyageId);
 
-        try {
-            spending = new Spending();
+            try {
+                spending = new Spending();
 
-            if(spendingFragment.value.getText().toString().equals("")){
-                spending.setValue(0d); //Double
-            }else{
                 spending.setValue(Double.parseDouble(spendingFragment.value.getText().toString()));
+                spending.setDescription(spendingFragment.description.getText().toString());
+                spending.setPlace(spendingFragment.place.getText().toString());
+                spending.setDate(spendingFragment.dateSpending.getText().toString());
+                spending.setCategory(spendingFragment.spinner.getSelectedItem().toString());
+                spending.setVoyageId(voyageId);
+
+                Log.d("Saved on Spending", "values: " + spending.getCategory() + " - " + spending.getDate() + " - " +
+                        spending.getValue() + " - " + spending.getDescription() + " - " + spending.getPlace() + " actualID: " + spending.getVoyageId());
+
+
+            }catch (NumberFormatException e){
+                Toast.makeText(getApplicationContext(), "Spending was not saved: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("Spending not saved: ", ">>: " + e.getMessage());
+
             }
-
-            spending.setDescription(spendingFragment.description.getText().toString());
-            spending.setPlace(spendingFragment.place.getText().toString());
-            spending.setDate(spendingFragment.dateSpending.getText().toString());
-            spending.setCategory(spendingFragment.spinner.getSelectedItem().toString());
-            spending.setVoyageId(voyageId);
-
-            Log.d("Saved on Spending", "values: " + spending.getCategory() + " - " + spending.getDate() + " - " +
-                    spending.getValue() + " - " + spending.getDescription() + " - " + spending.getPlace() + " actualID: " + spending.getVoyageId());
-
-
-        }catch (NumberFormatException e){
-            Toast.makeText(getApplicationContext(), "Spending was not saved: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d("Spending not saved: ", ">>: " + e.getMessage());
 
         }
 
-    }
+
 
     // Get from Bundle Extra the check if comes from VoyageListActivity
     public boolean isFromVoyageList(){
@@ -476,7 +542,6 @@ public class MenuVoyageActivity extends AppCompatActivity
 
     // Used to save spendings in the selected trip from TripList Activity..
     public void insertInSelectedVoyage(String category, String date, double value, String description, String place, int itemId){
-
 
         db = helper.getWritableDatabase();
 
