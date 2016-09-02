@@ -8,11 +8,6 @@
         android:title="@string/pref_header_limit_spending_values" />
 
 
-   <!-- <header
-        android:fragment="bonvoyage.app_preferences.SettingsActivity$NotificationPreferenceFragment"
-        android:icon="@drawable/ic_notifications_green_24dp"
-        android:title="@string/pref_header_set_login" /> -->
-
     <header
         android:fragment="bonvoyage.preferences.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/database"

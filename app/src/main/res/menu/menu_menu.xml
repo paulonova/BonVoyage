@@ -13,4 +13,12 @@
         android:title="@string/action_info"
         app:showAsAction="never" />
 
+
+    <item
+        android:id="@+id/refreshWeather"
+        android:orderInCategory="100"
+        android:title="@string/action_info"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        app:showAsAction="ifRoom" />
+
 </menu>

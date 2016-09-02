@@ -69,7 +69,7 @@ public class FirstAppInfoFragment extends Fragment implements WeatherServiceCall
         dialog.show();
 
         //Here I can change the location..
-        service.refreshWeather("Stockholm, SW");
+        service.refreshWeather("Stockholm, Sweden");
 
 
     }
