@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -57,7 +58,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.paulo.nackademin.examen.bonvoyage.MenuVoyageActivity" />
         </activity>
-
         <activity
             android:name=".SpendListActivity"
             android:label="@string/title_activity_spend_list"
@@ -66,6 +66,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.paulo.nackademin.examen.bonvoyage.MenuVoyageActivity" />
+        </activity>
+
+
+        <activity android:name="bonvoyage.weather.WeatherActivity"
+                  android:label="@string/voyage_weather">
+
         </activity>
     </application>
 

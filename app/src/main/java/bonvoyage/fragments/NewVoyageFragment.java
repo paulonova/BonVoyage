@@ -23,10 +23,6 @@ import se.paulo.nackademin.examen.bonvoyage.R;
  */
 public class NewVoyageFragment extends Fragment {
 
-    //For the Arrival and Exit date..
-//    private int year;
-//    private int month;
-//    private int day;
 
     public Button arrivalBtn;
     public Button departureBtn;
@@ -34,7 +30,6 @@ public class NewVoyageFragment extends Fragment {
 
 //    RadioGroup typeTrip;
     public RadioGroup radioGroup;
-//    private String typeTripText;
 
     //Database saving..
     private DatabaseHelper helper;
@@ -42,13 +37,6 @@ public class NewVoyageFragment extends Fragment {
     public EditText destination;
     public EditText budget;
     public EditText numberPerson;
-//    private Voyage voyage;
-//
-//    private int id_Actual;
-//
-//    private String compareDestiny;
-//    private String selectedDestiny;
-//    private String concatDestiny;
 
     //Empty Constructor
     public NewVoyageFragment() {

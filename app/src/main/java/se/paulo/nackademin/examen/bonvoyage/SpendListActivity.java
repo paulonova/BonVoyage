@@ -129,14 +129,14 @@ public class SpendListActivity extends AppCompatActivity implements SpendingList
 //Interfaces created in SpendingListAdapter to make the viewItem clickable..
     @Override
     public void onItemClick(int position) {
-        spending = spendList().get(position);
-        setSelectedDescription(spending.getDescription());
-        alertBeforeClose();
+        //Do nothing..
     }
 
     @Override
-    public void onStarIconClick(int p) {
-
+    public void onDeleteIconClick(int position) {
+        spending = spendList().get(position);
+        setSelectedDescription(spending.getDescription());
+        alertBeforeClose();
     }
 
 

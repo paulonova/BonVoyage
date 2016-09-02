@@ -191,4 +191,20 @@
     <string name="show_alert">Show limit alert</string>
 
 
+    <!-- Weather Strings  -->
+    <string name="temperature">Temperature</string>
+    <string name="condition">Condition</string>
+    <string name="location">Location</string>
+    <string name="powered_by_yahoo">powered by Yahoo!</string>
+    <string name="condition_icon">Condition Icon</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="temperature_output">%1$d&#176;%2$s</string>
+    <string name="update_location">Update Location</string>
+    <string name="cache_exception">No Cached Weather Data</string>
+    <string name="voyage_weather">Voyage Weather</string>
+    <string name="unit_selector">Switch to Fahrenheit</string>
+    <string name="location_format">City, Country</string>
+    <string name="find_location">Find weather on new places:</string>
+
+
 </resources>

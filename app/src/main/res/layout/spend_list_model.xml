@@ -70,7 +70,7 @@
             android:background="@color/colorAccent"/>
 
         <ImageView
-            android:id="@+id/imgSpendStar"
+            android:id="@+id/imgSpendDelete"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@android:drawable/ic_menu_delete"

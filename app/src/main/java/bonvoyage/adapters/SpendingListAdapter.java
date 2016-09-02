@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import bonvoyage.objects.Spending;
-import bonvoyage.objects.Voyage;
 import se.paulo.nackademin.examen.bonvoyage.R;
 
 /**
@@ -29,7 +28,7 @@ public class SpendingListAdapter extends RecyclerView.Adapter<SpendingListAdapte
 
     public interface ItemClickCallBack{
         void onItemClick(int p);
-        void onStarIconClick(int p);
+        void onDeleteIconClick(int p);
     }
 
     public void setItemClickCallBack(ItemClickCallBack itemClickCallBack) {
@@ -88,7 +87,7 @@ public class SpendingListAdapter extends RecyclerView.Adapter<SpendingListAdapte
     class SpendingHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView spendDate, spendDescription, spendValue;
-        private ImageView imgSpendIcon, imgSpendStar;
+        private ImageView imgSpendIcon, imgSpendDelete;
         private View container;
 
         public SpendingHolder(final View itemView) {
@@ -98,8 +97,8 @@ public class SpendingListAdapter extends RecyclerView.Adapter<SpendingListAdapte
             spendValue = (TextView)itemView.findViewById(R.id.spendValue);
             imgSpendIcon = (ImageView) itemView.findViewById(R.id.imgSpendIcon);
 
-            imgSpendStar = (ImageView) itemView.findViewById(R.id.imgSpendStar);
-            imgSpendStar.setOnClickListener(this);
+            imgSpendDelete = (ImageView) itemView.findViewById(R.id.imgSpendDelete);
+            imgSpendDelete.setOnClickListener(this);
 
             container = itemView.findViewById(R.id.containerSpendModel);
             container.setOnClickListener(this);
@@ -116,8 +115,8 @@ public class SpendingListAdapter extends RecyclerView.Adapter<SpendingListAdapte
                     itemClickCallBack.onItemClick(getAdapterPosition());
                     break;
 
-                case R.id.imgSpendStar:
-                    itemClickCallBack.onStarIconClick(getAdapterPosition());
+                case R.id.imgSpendDelete:
+                    itemClickCallBack.onDeleteIconClick(getAdapterPosition());
                     break;
             }
 

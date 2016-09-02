@@ -107,7 +107,7 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
         // To handle if voyagelist is empty..
         if(listVoyage().isEmpty()){
-            Toast.makeText(this, "There is no voyage registered! Register  one first..", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "There is no voyage registered! \n Register first..", Toast.LENGTH_LONG).show();
             finish();
         }else{
             Log.d("LAST_VOYAGE_ID", "" + getLastVoyageInfo());
@@ -132,9 +132,12 @@ public class VoyageListActivity extends AppCompatActivity implements VoyageListA
 
 
         if(isSwithBottonChecked()){
-            if(voyage.getAlertSpend() < voyage.getTotalSpend()){
-                buildLimitAlertDialog();
+            if(voyage != null){
+                if(voyage.getAlertSpend() < voyage.getTotalSpend()){
+                    buildLimitAlertDialog();
+                }
             }
+
         }
 
     }

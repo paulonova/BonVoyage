@@ -9,7 +9,7 @@
 
 
    <!-- <header
-        android:fragment="bonvoyage.preferences.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="bonvoyage.app_preferences.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_green_24dp"
         android:title="@string/pref_header_set_login" /> -->
 

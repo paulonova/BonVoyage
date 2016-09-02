@@ -35,6 +35,7 @@ import bonvoyage.fragments.SpendingFragment;
 import bonvoyage.objects.Spending;
 import bonvoyage.objects.Voyage;
 import bonvoyage.preferences.SettingsActivity;
+import bonvoyage.weather.WeatherActivity;
 
 public class MenuVoyageActivity extends AppCompatActivity
                                 implements NavigationView.OnNavigationItemSelectedListener {
@@ -123,6 +124,11 @@ public class MenuVoyageActivity extends AppCompatActivity
         Log.i("HEADER INFO","" + userEmail.getText().toString());
         Log.i("USER ID","" + currentUserId);
 
+    }
+
+    public void callWeatherActivity(View v){
+        Intent intent = new Intent(this, WeatherActivity.class);
+        startActivity(intent);
     }
 
 
@@ -218,7 +224,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
                 break;
 
-            case R.id.settings:
+            case R.id.weather_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
 
@@ -427,6 +433,7 @@ public class MenuVoyageActivity extends AppCompatActivity
                 if(isFromVoyageList()){
                     //TODO: Validate the date accord to the voyage date..
                     insertInSelectedVoyage(spending.getCategory(), spending.getDate(), spending.getValue(), spending.getDescription(), spending.getPlace(), retrieveSelectedVoyageID());
+                    startMenuVoyageActivity();
 
                 }else{
                     ContentValues values = new ContentValues();
