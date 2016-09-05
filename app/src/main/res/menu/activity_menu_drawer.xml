@@ -15,7 +15,7 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/showVoyages" />
         <item
-            android:id="@+id/weather_settings"
+            android:id="@+id/settings"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/settings" />
     </group>
@@ -30,6 +30,10 @@
                 android:id="@+id/logout"
                 android:icon="@drawable/logout"
                 android:title="@string/logout" />
+            <item
+                android:id="@+id/weather"
+                android:icon="@drawable/ic_cloud_circle_black_24dp"
+                android:title="@string/weather" />
         </menu>
     </item>
 

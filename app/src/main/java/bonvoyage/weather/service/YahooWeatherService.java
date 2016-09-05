@@ -28,8 +28,9 @@ public class YahooWeatherService {
     private WeatherActivity weatherActivity;
     private String location;
     private Exception error;
-    private boolean fahrenheit;
+    private String temperatureUnit = "C";
     private String YQL;
+
 
 
     public YahooWeatherService(WeatherServiceCallback callback) {
@@ -116,6 +117,15 @@ public class YahooWeatherService {
         }
     }
 
+
+    //GETTERS AND SETTERS
+    public String getTemperatureUnit() {
+        return temperatureUnit;
+    }
+
+    public void setTemperatureUnit(String temperatureUnit) {
+        this.temperatureUnit = temperatureUnit;
+    }
 
 
 

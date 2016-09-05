@@ -23,6 +23,11 @@ public class Channel implements JSONPopulator  {
         item.populate(data.optJSONObject("item"));
     }
 
+    @Override
+    public JSONObject toJSON() {
+        return null;
+    }
+
 
     public Item getItem() {
         return item;

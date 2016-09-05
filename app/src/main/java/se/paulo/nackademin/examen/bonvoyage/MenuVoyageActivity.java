@@ -224,7 +224,7 @@ public class MenuVoyageActivity extends AppCompatActivity
 
                 break;
 
-            case R.id.weather_settings:
+            case R.id.settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
 
@@ -248,6 +248,13 @@ public class MenuVoyageActivity extends AppCompatActivity
                 logout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout);
                 finish();
+                break;
+
+            case R.id.weather:
+                Intent weatherIntent = new Intent(this, WeatherActivity.class);
+                //weatherIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(weatherIntent);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -23,14 +23,6 @@
             android:textColor="#00796b"
             android:text="@string/large_text" />
 
-        <ImageView
-            android:id="@+id/how_it_works"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/how_it_works" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -67,10 +67,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.paulo.nackademin.examen.bonvoyage.MenuVoyageActivity" />
         </activity>
-
-
-        <activity android:name="bonvoyage.weather.WeatherActivity"
-                  android:label="@string/voyage_weather">
+        <activity
+            android:name="bonvoyage.weather.WeatherActivity"
+            android:label="@string/voyage_weather">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MenuVoyageActivity" />
 
         </activity>
     </application>

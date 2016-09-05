@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayoutMaster"
     android:layout_width="match_parent"
@@ -11,131 +11,116 @@
 
 
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <RelativeLayout
-        android:id="@+id/relativeLayoutWeather"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/weatherIconImageView"
-            android:src="@drawable/icon_na"
-            android:contentDescription="@string/condition_icon"
-            android:layout_above="@+id/temperatureTextView"
-            android:layout_alignEnd="@+id/conditionTextView" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/temperature"
-            android:id="@+id/temperatureTextView"
-            android:textStyle="bold"
-            android:typeface="serif"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/condition"
-            android:id="@+id/conditionTextView"
-            android:layout_below="@+id/temperatureTextView"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/location"
-            android:id="@+id/locationTextView"
-            android:textStyle="bold"
-            android:layout_below="@+id/conditionTextView"
-            android:layout_centerHorizontal="true" />
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="300dp"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:background="@drawable/weather_rounded_borders"
-        android:alpha="3.0"
-        android:padding="10dp"
-        android:layout_below="@+id/relativeLayoutWeather"
-        android:layout_centerHorizontal="true">
-
-        <Switch
-            android:id="@+id/switchUnit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:switchPadding="60dp"
-            android:textColor="#5b5b5b"
-            android:layout_alignParentTop="true"
-            android:text="@string/unit_selector" />
-        <View
+        <RelativeLayout
+            android:id="@+id/relativeLayoutWeather"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/switchUnit"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/darker_gray"/>
+            android:layout_height="200dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp">
 
-        <TextView
-            android:id="@+id/txtFindWeatherPlaces"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_below="@id/switchUnit"
-            android:text="@string/find_location"/>
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:id="@+id/weatherIconImageView"
+                android:src="@drawable/icon_na"
+                android:contentDescription="@string/condition_icon"
+                android:layout_above="@+id/temperatureTextView"
+                android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:id="@+id/edtxLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/location_format"
-            android:layout_below="@id/txtFindWeatherPlaces"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/temperature"
+                android:id="@+id/temperatureTextView"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
-        <ImageButton
-            android:id="@+id/btnSendRequest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/button_weather"
-            android:background="@android:color/transparent"
-            android:layout_below="@+id/edtxLocation"
-            android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/condition"
+                android:id="@+id/conditionTextView"
+                android:layout_below="@+id/temperatureTextView"
+                android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:id="@+id/txtSendRequestLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/location"
+                android:id="@+id/locationTextView"
+                android:textStyle="bold"
+                android:layout_below="@+id/conditionTextView"
+                android:layout_centerHorizontal="true" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="300dp"
             android:gravity="center_horizontal"
-            android:layout_below="@id/btnSendRequest"
-            android:text="Send Request"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/weather_rounded_borders"
+            android:padding="10dp"
+            android:layout_below="@+id/relativeLayoutWeather"
+            android:layout_marginTop="60dp"
+            android:layout_centerHorizontal="true">
 
 
+
+            <TextView
+                android:id="@+id/txtFindWeatherPlaces"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/find_location"/>
+
+            <EditText
+                android:id="@+id/edtxLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/location_format"
+                android:layout_below="@id/txtFindWeatherPlaces"/>
+
+            <ImageButton
+                android:id="@+id/btnSendRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/button_weather"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/edtxLocation"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/txtSendRequestLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/btnSendRequest"
+                android:text="Send Request"/>
+
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/yahoo_logo"
-        android:id="@+id/imageView"
-        android:contentDescription="@string/powered_by_yahoo"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp" />
+</ScrollView>
 
 
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

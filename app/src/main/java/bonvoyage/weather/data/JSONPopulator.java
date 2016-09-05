@@ -7,4 +7,6 @@ public interface JSONPopulator {
 
     void populate(JSONObject data);
 
+    JSONObject toJSON();
+
 }

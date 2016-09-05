@@ -20,6 +20,11 @@ public class Condition implements JSONPopulator  {
 
     }
 
+    @Override
+    public JSONObject toJSON() {
+        return null;
+    }
+
 
     public int getCode() {
         return code;

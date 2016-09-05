@@ -17,6 +17,11 @@ public class Item implements JSONPopulator {
         condition.populate(data.optJSONObject("condition"));
     }
 
+    @Override
+    public JSONObject toJSON() {
+        return null;
+    }
+
     public Condition getCondition() {
         return condition;
     }

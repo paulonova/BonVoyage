@@ -16,6 +16,11 @@ public class Units implements JSONPopulator  {
         temperature = data.optString("temperature");
     }
 
+    @Override
+    public JSONObject toJSON() {
+        return null;
+    }
+
     public String getTemperature() {
         return temperature;
     }

@@ -1,41 +1,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context="bonvoyage.fragments.FirstAppInfoFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_app" />
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="@drawable/landscape_backg">
 
-    <RelativeLayout
-        android:id="@+id/buttonsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin">
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="20dp"
-            android:layout_below="@id/how_it_works">
-
-            <Button
-                android:id="@+id/btnWeather"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="callWeatherActivity"
-                android:text="Weather"/>
-
-
-        </ScrollView>
-
-    </RelativeLayout>
+       </RelativeLayout>
 
 
 </FrameLayout>
