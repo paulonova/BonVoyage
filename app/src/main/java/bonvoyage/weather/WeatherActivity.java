@@ -1,8 +1,15 @@
 package bonvoyage.weather;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +43,6 @@ public class WeatherActivity extends AppCompatActivity implements WeatherService
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,8 @@ public class WeatherActivity extends AppCompatActivity implements WeatherService
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //Connecting to MenuVoyageActivity!
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         weatherIconImageView = (ImageView) findViewById(R.id.weatherIconImageView);
         temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
@@ -63,6 +71,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherService
             }
         });
 
+
         weatherActivity = new WeatherActivity();
 
         service = new YahooWeatherService(this);
@@ -71,10 +80,11 @@ public class WeatherActivity extends AppCompatActivity implements WeatherService
         dialog.show();
 
         //Here I can change the location..
-        service.refreshWeather("Stockholm, Sweden");
+        service.refreshWeather("Stockholm");
 
 
     }
+
 
 
     @Override
