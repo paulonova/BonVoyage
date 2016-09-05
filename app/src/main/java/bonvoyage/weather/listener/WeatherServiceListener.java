@@ -1,10 +1,10 @@
-package bonvoyage.weather.service;
+package bonvoyage.weather.listener;
 
 
 import bonvoyage.weather.data.Channel;
 
 
-public interface WeatherServiceCallback {
+public interface WeatherServiceListener {
     void serviceSuccess(Channel channel);
 
     void serviceFailure(Exception exception);

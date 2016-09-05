@@ -12,14 +12,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import bonvoyage.weather.data.Channel;
 import bonvoyage.weather.data.Item;
-import bonvoyage.weather.service.WeatherServiceCallback;
+import bonvoyage.weather.listener.WeatherServiceListener;
 import bonvoyage.weather.service.YahooWeatherService;
 import se.paulo.nackademin.examen.bonvoyage.R;
 
-public class WeatherActivity extends AppCompatActivity implements WeatherServiceCallback {
+public class WeatherActivity extends AppCompatActivity implements WeatherServiceListener {
 
 
     private ImageView weatherIconImageView;

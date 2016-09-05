@@ -36,4 +36,6 @@ public class Channel implements JSONPopulator  {
     public Units getUnits() {
         return units;
     }
+
+
 }

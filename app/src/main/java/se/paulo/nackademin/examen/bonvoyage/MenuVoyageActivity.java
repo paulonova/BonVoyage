@@ -169,11 +169,6 @@ public class MenuVoyageActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
 
-            case R.id.refreshWeather:
-                intent = new Intent(this, MenuVoyageActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-//                startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
 
         return super.onOptionsItemSelected(item);

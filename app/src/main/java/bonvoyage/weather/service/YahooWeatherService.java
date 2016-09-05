@@ -1,30 +1,27 @@
 package bonvoyage.weather.service;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import bonvoyage.weather.WeatherActivity;
 import bonvoyage.weather.data.Channel;
+import bonvoyage.weather.listener.WeatherServiceListener;
 
 /**
  * Created by Paulo Vila Nova on 2016-09-01.
  */
 public class YahooWeatherService {
 
-    private WeatherServiceCallback callback;
+    private WeatherServiceListener callback;
     private WeatherActivity weatherActivity;
     private String location;
     private Exception error;
@@ -33,7 +30,7 @@ public class YahooWeatherService {
 
 
 
-    public YahooWeatherService(WeatherServiceCallback callback) {
+    public YahooWeatherService(WeatherServiceListener callback) {
         this.callback = callback;
     }
 

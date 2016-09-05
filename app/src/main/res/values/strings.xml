@@ -206,6 +206,7 @@
     <string name="location_format">City, Country</string>
     <string name="find_location">Find weather on new places:</string>
     <string name="weather">Weather</string>
+    <string name="weather_settings">Weather settings</string>
 
 
 </resources>
