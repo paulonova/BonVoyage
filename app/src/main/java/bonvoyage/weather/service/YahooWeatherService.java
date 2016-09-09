@@ -21,33 +21,29 @@ import bonvoyage.weather.listener.WeatherServiceListener;
  */
 public class YahooWeatherService {
 
-    private WeatherServiceListener callback;
-    private WeatherActivity weatherActivity;
-    private String location;
+    private WeatherServiceListener listener;
     private Exception error;
     private String temperatureUnit = "C";
-    private String YQL;
 
 
-
-    public YahooWeatherService(WeatherServiceListener callback) {
-        this.callback = callback;
+    public YahooWeatherService(WeatherServiceListener listener) {
+        this.listener = listener;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public void refreshWeather(String l){
-        this.location = l;
+    public void refreshWeather(String location){
 
-        new AsyncTask<String, Void, String>() {
+        new AsyncTask<String, Void, Channel>() {
 
             @Override
-            protected String doInBackground(String... strings) {
+            protected Channel doInBackground(String[] locations) {
 
-                //YQL = String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\")", strings[0]); // Feranheid
-                YQL = String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\") and u='c'", strings[0]);  //Celsius
+                String location = locations[0];
+
+                Channel channel = new Channel();
+
+                String unit = getTemperatureUnit().equalsIgnoreCase("f") ? "f" : "c";
+                String YQL = String.format("select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=\"%s\") and u='" + unit + "'", location);
 
                 String endpoint = String.format("https://query.yahooapis.com/v1/public/yql?q=%s&format=json", Uri.encode(YQL));
 
@@ -55,6 +51,7 @@ public class YahooWeatherService {
                     URL url = new URL(endpoint);
 
                     URLConnection connection = url.openConnection();
+                    connection.setUseCaches(false);
 
                     InputStream inputStream = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -65,7 +62,20 @@ public class YahooWeatherService {
                         result.append(line);
                     }
 
-                    return result.toString();
+                    JSONObject data = new JSONObject(result.toString());
+
+                    JSONObject queryResults = data.optJSONObject("query");
+                    int count = queryResults.optInt("count");
+
+                    if (count == 0) {
+                        error = new LocationWeatherException("No weather information found for " + location);
+                        return null;
+                    }
+
+                    JSONObject channelJSON = queryResults.optJSONObject("results").optJSONObject("channel");
+                    channel.populate(channelJSON);
+
+                    return channel;
 
                 } catch (Exception e) {
                     error = e;
@@ -75,31 +85,13 @@ public class YahooWeatherService {
             }
 
             @Override
-            protected void onPostExecute(String s) {
+            protected void onPostExecute(Channel channel) {
 
-                if(s == null && error != null){
-                    callback.serviceFailure(error);
-                    return;
+                if (channel == null && error != null) {
+                    listener.serviceFailure(error);
+                } else {
+                    listener.serviceSuccess(channel);
                 }
-
-                try {
-                    JSONObject data = new JSONObject(s);
-                    JSONObject queryResults = data.optJSONObject("query");
-
-                    int count = queryResults.optInt("count");
-                    if(count == 0){
-                        callback.serviceFailure(new LocationWeatherException("No weather information found for " + location));
-                        return;
-                    }
-
-                    Channel channel = new Channel();
-                    channel.populate(queryResults.optJSONObject("results").optJSONObject("channel"));
-                    callback.serviceSuccess(channel);
-
-                } catch (JSONException e) {
-                    callback.serviceFailure(e);
-                }
-
 
             }
 

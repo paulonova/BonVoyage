@@ -22,7 +22,17 @@ public class Condition implements JSONPopulator  {
 
     @Override
     public JSONObject toJSON() {
-        return null;
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put("code", code);
+            data.put("temp", temperature);
+            data.put("text", description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return data;
     }
 
 

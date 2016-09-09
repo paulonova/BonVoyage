@@ -15,6 +15,7 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+import bonvoyage.fragments.WeatherSettingsFragment;
 import se.paulo.nackademin.examen.bonvoyage.R;
 
 /**
@@ -44,6 +45,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+//        // Display the fragment as the main content.
+//        getFragmentManager().beginTransaction().replace(android.R.id.content, new WeatherSettingsFragment()).commit();
     }
 
     /**
@@ -92,23 +95,24 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
-                || GeneralPreferenceFragment.class.getName().equals(fragmentName)
-                || DataSyncPreferenceFragment.class.getName().equals(fragmentName);
+                || SpendLimitPreferenceFragment.class.getName().equals(fragmentName)
+                || DatabaseEditPreferenceFragment.class.getName().equals(fragmentName)
+                || WeatherSettingsPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
-     * This fragment shows general app_preferences only. It is used when the
+     * This fragment shows general weather_pref only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class SpendLimitPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_set_spend_limit);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone app_preferences
+            // Bind the summaries of EditText/List/Dialog/Ringtone weather_pref
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
@@ -128,18 +132,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     /**
-     * This fragment shows data and sync app_preferences only. It is used when the
+     * This fragment shows data and sync weather_pref only. It is used when the
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+    public static class DatabaseEditPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.database_restore);//****************************DATABASE *********************
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone app_preferences
+            // Bind the summaries of EditText/List/Dialog/Ringtone weather_pref
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
@@ -156,4 +160,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * This fragment shows data and sync weather_pref only. It is used when the
+     * activity is showing a two-pane settings UI.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class WeatherSettingsPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.weather_pref);//****************************Weather *********************
+            setHasOptionsMenu(true);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone weather_pref
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            //bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

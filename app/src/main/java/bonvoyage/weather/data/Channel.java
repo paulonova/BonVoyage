@@ -8,10 +8,21 @@ import org.json.JSONObject;
  */
 public class Channel implements JSONPopulator  {
 
-    private Item item;
     private Units units;
+    private Item item;
+    private String location;
 
+    public Units getUnits() {
+        return units;
+    }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
     @Override
     public void populate(JSONObject data) {
@@ -21,20 +32,29 @@ public class Channel implements JSONPopulator  {
 
         item = new Item();
         item.populate(data.optJSONObject("item"));
+
+        JSONObject locationData = data.optJSONObject("location");
+
+        String region = locationData.optString("region");
+        String country = locationData.optString("country");
+
+        location = String.format("%s, %s", locationData.optString("city"), (region.length() != 0 ? region : country));
     }
 
     @Override
     public JSONObject toJSON() {
-        return null;
-    }
 
+        JSONObject data = new JSONObject();
 
-    public Item getItem() {
-        return item;
-    }
+        try {
+            data.put("units", units.toJSON());
+            data.put("item", item.toJSON());
+            data.put("requestLocation", location);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-    public Units getUnits() {
-        return units;
+        return data;
     }
 
 

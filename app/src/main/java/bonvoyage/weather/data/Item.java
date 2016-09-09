@@ -19,7 +19,13 @@ public class Item implements JSONPopulator {
 
     @Override
     public JSONObject toJSON() {
-        return null;
+        JSONObject data = new JSONObject();
+        try {
+            data.put("condition", condition.toJSON());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public Condition getCondition() {

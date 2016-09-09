@@ -207,6 +207,7 @@
     <string name="find_location">Find weather on new places:</string>
     <string name="weather">Weather</string>
     <string name="weather_settings">Weather settings</string>
+    <string name="pref_header_weather_sync">Weather settings</string>
 
 
 </resources>

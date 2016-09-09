@@ -12,13 +12,15 @@
     <string name="pref_description_enable_geolocation">Automatically obtain weather information based on my current location</string>
 
     <string name="pref_title_manual_location">Manual Location</string>
-    <string name="pref_default_location">Austin, TX</string>
+    <string name="pref_default_location">Stockholm, Swed</string>
 
     <string name="pref_title_temperature_unit">Temperature Unit</string>
+
     <string-array name="pref_temperature_unit_titles">
         <item>&#176;C</item>
         <item>&#176;F</item>
     </string-array>
+
     <string-array name="pref_temperature_unit_values">
         <item>C</item>
         <item>F</item>
