@@ -208,6 +208,7 @@
     <string name="weather">Weather</string>
     <string name="weather_settings">Weather settings</string>
     <string name="pref_header_weather_sync">Weather settings</string>
+    <string name="manual_location_sumary">Search for weather of preferred city..</string>
 
 
 </resources>

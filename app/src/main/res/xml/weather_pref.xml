@@ -11,9 +11,10 @@
         android:capitalize="words"
         android:defaultValue="@string/pref_default_location"
         android:dialogTitle="@string/pref_title_manual_location"
+        android:summary="@string/manual_location_sumary"
         android:inputType="textCapWords"
         android:key="@string/pref_manual_location"
-        android:maxLines="1"
+        android:maxLines="2"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_manual_location" />
