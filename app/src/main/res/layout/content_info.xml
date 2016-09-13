@@ -23,14 +23,6 @@
             android:textColor="#00796b"
             android:text="@string/large_text" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold|italic"
-            android:textColor="#00796b"
-            android:text="@string/info_howitworks"/>
-
 
     </LinearLayout>
 

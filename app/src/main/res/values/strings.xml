@@ -9,19 +9,27 @@
     <string name="user_name">username</string>
     <string name="title_activity_meny2">Bon Voyage info..</string>
     <string name="large_text">
-        "Bon Voyage.\n\n"
+        "Bon Voyage:\n\n"
 
-        "'Bon Voyage' är en app som utvecklats av mig under den sista år på min skola i Sverige "Nackademin Yrkesutbildning" 2015"
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-    </string>
+        "'Bon Voyage' is an app that I develop under my course in Nackademin / Sweden year 2016 as my examination project."
+        ""BonVoyage" is a travel app for anyone who wants to register their journeys. The app makes possible to register your username, email and password to get into the app, and then, in the dashboard, you can register the trips, register your spending by category "Food, Fuel, Transportation, Accomodation and Others" and each category has its icon.
+You can also see a list of all the expenses with the date and cost as well as being possible to erase each expense. You can also see a list of all the expenses with the date and cost as well as being possible to erase each expense.
+\n"
+        "In the app, you can define how much money you can spend on the trip and put on a warning in percent (%) that tell you if your expenses exceed your budget and how many people will be with you.
+The weather can also be displayed at exactly the place you are in the world, and to also look for the weather in another city in another country.\n\n"
+
+        "Technical Restriction:\n\n"
+        "The app runs only on the phone that has Android operating sistem, compileSdkVersion 23, minSdkVersion 19 and targetSdkVersion 23rd
+The app requires GPS functionality and internet.\n\n"
+        "Technical description: \n\n"
+
+        "Technology used in the app are:\n
+- Database SQLite
+- Yahoo Weather API  ==> https://developer.yahoo.com/weather/
+- RecyclerView
+- ButterKnife framework  ==> http://jakewharton.github.io/butterknife/\n\n"
+        "So! have fun, get the app and 'avoir Bon Voyage'"</string>
+
     <string name="logo">logo</string>
     <string name="newVoyage">New Voyage</string>
     <string name="newSpending">New Spending</string>
@@ -86,18 +94,7 @@
     <string name="tab_words">Testing Tabs 1</string>
     <string name="tabRateAPet">Testando 01</string>
     <string name="tabViewMyRates">Testando 02</string>
-    <string name="info_howitworks">”BonVoyage” Är en rese app för alla som vill registrerar sina resor.
-        Appen gör möjligt att registrera ditt användarnamn och lösenord för att få komma in i programmet och sedan, i
-        instrumentbrädan, kan du registrera din resa, sätta på hur mycket pengar kan du spendera på resorna och hur
-        många personer kommer att vara med dig under restid.  Man kan också registrerar utgifterna på den respektive
-        Appen gör möjligt att registrera ditt användarnamn och lösenord för att få komma in i programmet och sedan, i
-        instrumentbrädan, kan du registrera din resa, sätta på hur mycket pengar kan du spendera på resorna och hur
-        många personer kommer att vara med dig under restid.  Man kan också registrerar utgifterna på den respektive
-        Appen gör möjligt att registrera ditt användarnamn och lösenord för att få komma in i programmet och sedan, i
-        instrumentbrädan, kan du registrera din resa, sätta på hur mycket pengar kan du spendera på resorna och hur
-        många personer kommer att vara med dig under restid.  Man kan också registrerar utgifterna på den respektive
-        resa eller att lägga till utgift på en annan resa. Alla information lagras i databas (Sqlite) och kan bli syn
-        när användare vill.</string>
+
     <string name="delete_database_alert">Database will be deleted and restored! Are you sure?</string>
     <string name="restore_database">Restore Database</string>
     <string name="database_alert">Database Alert!</string>
